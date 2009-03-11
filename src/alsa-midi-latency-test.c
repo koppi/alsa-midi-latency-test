@@ -33,7 +33,7 @@ static void mydelay(int loops) {
   for(u = 0;u < loops; u++) k += 1;
 }
 
-/* sets the process to "policy" policy at maximum priority */
+/* sets the process to "policy" policy at given priority */
 static int set_realtime_priority(int policy, int prio) {
   struct sched_param schp;
   memset(&schp, 0, sizeof(schp));
@@ -52,11 +52,10 @@ static int set_realtime_priority(int policy, int prio) {
 }
 
 /* determines first the CPU frequency which is then stored in a global
-   variable ( cpu_hz) which is needed to get accurate timing information
-   through the Pentium RDTSC instruction
-   determines how many loops per second the CPU is able to execute 
-   returns the number of loops per sec, this is used for busywaiting
-   through the mydelay() function */
+   variable (cpu_hz) which is needed to get accurate timing information
+   through the Pentium RDTSC instruction determines how many loops per
+   second the CPU is able to execute returns the number of loops per
+   sec, this is used for busywaiting through the mydelay() function */
 static int calibrate_loop(void) {
   FILE *f;
   char *res;
@@ -68,12 +67,12 @@ static int calibrate_loop(void) {
   /* read the CPU frequency from /proc/cpuinfo  */
   f = fopen("/proc/cpuinfo","r");
 
-  if(f==NULL) {
+  if (f==NULL) {
     perror("can't open /proc/cpuinfo, exiting. open");
     exit(1);
   }
 
-  for(;;) {
+  for (;;) {
     res = fgets(s1, 100, f);
 
     if (res == NULL) {
