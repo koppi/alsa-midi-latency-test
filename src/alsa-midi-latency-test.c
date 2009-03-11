@@ -37,17 +37,12 @@ static void mydelay(int loops) {
 static int set_realtime_priority(int policy, int prio) {
   struct sched_param schp;
   memset(&schp, 0, sizeof(schp));
-  if (prio == -1) {
-    schp.sched_priority = sched_get_priority_max(policy);
-  } else {
-    schp.sched_priority = prio;
-  }
-  
+
+  schp.sched_priority = prio;
   if (sched_setscheduler(0, policy, &schp) != 0) {
     perror("sched_setscheduler");
     return -1;
   }
-  
   return 0;
 }
 
@@ -495,7 +490,7 @@ int main(int argc, char *argv[]) {
   int c;
   int do_list = 0;
   int do_realtime = 0;
-  int rt_prio = -1;
+  int rt_prio = sched_get_priority_max(SCHED_FIFO);
   int skip_samples = 0;
   int nr_samples = 10000;
 
