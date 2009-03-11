@@ -451,6 +451,12 @@ static void version(void) {
   printf("%s %s\n", PACKAGE, VERSION);
 }
 
+static volatile sig_atomic_t stop = 0;
+
+static void sighandler(int sig) {
+  stop = 1;
+}
+
 int main(int argc, char *argv[]) {
   int client;
 
@@ -641,6 +647,9 @@ int main(int argc, char *argv[]) {
     printf("\nsample; latency_ms; latency_ms_worst\n");
   }
 
+  signal(SIGINT,  sighandler);
+  signal(SIGTERM, sighandler);
+
   //send_note(seq, port_out[0].port, queue, 0);
   while (1) {
     if (gotnote == 1) {
@@ -686,6 +695,10 @@ int main(int argc, char *argv[]) {
 	    snd_seq_free_event(mev);
 	  } while (snd_seq_event_input_pending(seq, 0) > 0);
 	}
+      }
+
+      if (stop) {
+	break;
       }
     }
 
