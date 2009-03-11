@@ -1,0 +1,82 @@
+.TH "ALSA-MIDI-LATENCY-TEST" "1" "0.0.1" "03/2009" ""
+.SH NAME
+alsa-midi-latency-test \- tests latency of a MIDI device.
+
+.SH SYNOPSIS
+.B alsa-midi-latency-test
+\-o client:port -i client:port [options]
+.br
+.B alsa-midi-latency-test
+\-\-help
+
+.SH DESCRIPTION
+.B alsa-midi-latency-test
+is a command-line utility that tests latency of a MIDI device or a MIDI device chain.
+
+To interrupt a running latency measurement test, press <Ctrl+C>.
+
+.SH OPTIONS
+
+.TP
+.I \-o,\-\-output=client:port
+Sets the sequencer port where test events are sent to.
+
+A client can be specified by its number, its name, or a prefix of its
+name. A port is specified by its number; for port 0 of a client, the
+":0" part of the port specification can be omitted.
+
+.TP
+.I \-i,\-\-input=client:port
+Sets the sequencer port where test events are received from.
+
+A client can be specified by its number, its name, or a prefix of its
+name. A port is specified by its number; for port 0 of a client, the
+":0" part of the port specification can be omitted.
+
+.TP
+.I \-l,\-\-list
+Lists MIDI input and output ports.
+
+.TP
+.I \-R,\-\-realtime
+Use realtime scheduling. (default: no rt).
+
+.TP
+.I \-P,\-\-priority=int
+When running with --realtime, set the scheduler priority to int.
+
+.TP
+.I \-S,\-\-samples=int
+Take given number of samples (default: 10000).
+
+.TP
+.I \-s,\-\-skip=int
+Skip measuring latency for the given number of samples (default: 0/no sample skip).
+
+.TP
+.I \-h,\-\-help
+Prints a list of options.
+
+.TP
+.I \-V,\-\-version
+Prints the current version.
+
+.SH SEE ALSO
+.PP
+.I http://www.linuxaudio.org/mailarchive/lat/
+.br
+The linux-audio tuning (LAT) mailing list is to help GNU/Linux distribution
+maintainers and other interested users to share information on system
+performance tuning matters, especially with regard to real-time Linux
+kernels.
+.PP
+.I http://www.alsa\-project.org
+.br
+The Advanced Linux Sound Architecture.
+
+.SH BUGS
+This is an early release.  Please report bugs to
+Jakob Flierl <jakob.flierl@gmail.com>.
+
+.SH AUTHORS
+Jakob Flierl <jakob.flierl@gmail.com>

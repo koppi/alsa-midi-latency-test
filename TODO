@@ -1,0 +1,16 @@
+DONE
+
+* 20090311
+ - added autoconf/automake
+ - added a manual page
+
+* 20090309
+ - Initial version.
+
+TODO
+
+* implement more features of MidiTest, see
+  http://earthvegaconnection.com/evc/products/miditest/index.html
+ - Measure speed
+ - Measure functioning
+ - Send/Received Sysex test data
