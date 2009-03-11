@@ -634,6 +634,10 @@ int main(int argc, char *argv[]) {
   unsigned long sample_nr = 0;
 
   printf("\n> sampling %d midi latency values - please wait..\n", nr_samples);
+  printf("> press Ctrl+C to abort test.\n");
+  signal(SIGINT,  sighandler);
+  signal(SIGTERM, sighandler);
+
   if (skip_samples > 0) {
     if (skip_samples == 1) {
       printf("> skipping first latency sample.\n");
@@ -641,14 +645,12 @@ int main(int argc, char *argv[]) {
       printf("> skipping first %d latency samples.\n", skip_samples);
     }
   }
+
   sleep(1);
 
   if (DEBUG) {
     printf("\nsample; latency_ms; latency_ms_worst\n");
   }
-
-  signal(SIGINT,  sighandler);
-  signal(SIGTERM, sighandler);
 
   //send_note(seq, port_out[0].port, queue, 0);
   while (1) {
