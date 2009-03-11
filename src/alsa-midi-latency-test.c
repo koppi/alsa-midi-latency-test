@@ -659,7 +659,7 @@ int main(int argc, char *argv[]) {
     }
 
     usleep(150); // wtf!?!!
-    if (poll(pfd, npfd, 1000) > 0) {
+    if (poll(pfd, npfd, 69) > 0) {
       for (l1 = 0; l1 < npfd; l1++) {
         if (pfd[l1].revents > 0) {
 	  do {
