@@ -1,4 +1,4 @@
-LDADD = -lrt -lasound
+LDADD = -lasound
 
 EXTRA_DIST = alsa-midi-latency-test.1
 

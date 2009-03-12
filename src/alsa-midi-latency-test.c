@@ -247,6 +247,7 @@ static void list_ports(snd_seq_t* seq) {
   }
 }
 
+/*
 static void dump_event(const snd_seq_event_t *ev) {
   printf("%3d:%-3d ", ev->source.client, ev->source.port);
 
@@ -411,6 +412,7 @@ static void dump_event(const snd_seq_event_t *ev) {
     printf("Event type %d\n",  ev->type);
   }
 }
+*/
 
 static void send_note(snd_seq_t* seq, int port, int queue, int tick) {
   snd_seq_event_t ev;
@@ -624,7 +626,6 @@ int main(int argc, char *argv[]) {
 
   snd_seq_event_t *mev;
   int gotnote = 1;
-  int tick = 0;
 
   unsigned long sample_nr = 0;
 
@@ -648,6 +649,7 @@ int main(int argc, char *argv[]) {
   }
 
   //send_note(seq, port_out[0].port, queue, 0);
+  mytime1 = mygettime();
   while (1) {
     if (gotnote == 1) {
       gotnote = 0;
@@ -680,11 +682,11 @@ int main(int argc, char *argv[]) {
 	      } else if (midi_delay > max_delay) {
 		max_delay = midi_delay;
 		if (DEBUG) {
-		  printf("%6d; %10.2f; %10.2f     \n", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
+		  printf("%6lud; %10.2f; %10.2f     \n", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
 		}
 	      } else {
 		if (DEBUG) {
-		  printf("%6d; %10.2f; %10.2f     \r", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
+		  printf("%6lud; %10.2f; %10.2f     \r", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
 		}
 	      }
 	      gotnote = 1;
@@ -714,7 +716,7 @@ int main(int argc, char *argv[]) {
       int skip = 0;
       for (i = 0; i < max_delay * 10000; i++) {
 	if (delay_hist[i] > 0) {
-	  printf("%5.1f -%5.1f ms: %8d ", i/10.0, i/10.0 + 0.09, delay_hist[i]);
+	  printf("%5.1f -%5.1f ms: %8ld ", i/10.0, i/10.0 + 0.09, delay_hist[i]);
 	  skip = 0;
 	} else {
 	  skip++;

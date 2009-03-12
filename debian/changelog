@@ -1,0 +1,5 @@
+alsa-midi-latency-test (0.0.1-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Jakob Flierl <jakob.flierl@gmail.com>  Thu, 12 Mar 2009 12:01:50 +0100
