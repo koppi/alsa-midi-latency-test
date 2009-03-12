@@ -682,11 +682,11 @@ int main(int argc, char *argv[]) {
 	      } else if (midi_delay > max_delay) {
 		max_delay = midi_delay;
 		if (DEBUG) {
-		  printf("%6lud; %10.2f; %10.2f     \n", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
+		  printf("%6lu; %10.2f; %10.2f     \n", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
 		}
 	      } else {
 		if (DEBUG) {
-		  printf("%6lud; %10.2f; %10.2f     \r", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
+		  printf("%6lu; %10.2f; %10.2f     \r", sample_nr, midi_delay * 1000.0, max_delay * 1000.0);
 		}
 	      }
 	      gotnote = 1;
