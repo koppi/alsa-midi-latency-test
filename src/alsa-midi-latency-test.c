@@ -414,16 +414,26 @@ static void dump_event(const snd_seq_event_t *ev) {
 }
 */
 
-static void send_note(snd_seq_t* seq, int port, int queue, int tick) {
+static void send_note(snd_seq_t* seq, int queue, int tick) {
   snd_seq_event_t ev;
 
   snd_seq_ev_clear(&ev);
   snd_seq_ev_set_subs(&ev);
-  snd_seq_ev_set_source(&ev, port);
+  snd_seq_ev_set_source(&ev, 0);
   snd_seq_ev_schedule_tick(&ev, queue, tick, 4);
   snd_seq_ev_set_note(&ev, 0, 60, 127, 1);
-  snd_seq_event_output(seq, &ev);
-  snd_seq_drain_output(seq);
+
+  int err = snd_seq_event_output(seq, &ev);
+  if (err < 0)
+  {
+    errormsg("Error sending event: %d", err);
+  }
+
+  err = snd_seq_drain_output(seq);
+  if (err < 0)
+  {
+    errormsg("Output drain error: %d (%s)", err, snd_strerror(err));
+  }
 }
 
 // end: alsa foo
@@ -650,11 +660,11 @@ int main(int argc, char *argv[]) {
 
   //send_note(seq, port_out[0].port, queue, 0);
   mytime1 = mygettime();
-  while (1) {
+  while (sample_nr < nr_samples) {
     if (gotnote == 1) {
       gotnote = 0;
       mytime1 = mygettime();
-      send_note(seq, port_out[0].port, queue, 0);
+      send_note(seq, queue, 0);
     }
 
     usleep(150); // wtf!?!!
@@ -696,66 +706,59 @@ int main(int argc, char *argv[]) {
 	}
       }
 
-      if (stop) {
-	break;
-      }
     }
 
-    if (sample_nr >= nr_samples) {
-
-      printf("\n> done.\n\n> latency distribution:\n");
-
-      // try to make ascii bars thinner than 50 columns
-      int max_samples = 1;
-      for (i = 0; i < 9999; ++i) {
-	if (delay_hist[i] > max_samples) max_samples = delay_hist[i];
-      }
-      int graph_step = (int)((float)(max_samples / 50.0));
-
-      // plot ascii bars
-      int skip = 0;
-      for (i = 0; i < max_delay * 10000; i++) {
-	if (delay_hist[i] > 0) {
-	  printf("%5.1f -%5.1f ms: %8ld ", i/10.0, i/10.0 + 0.09, delay_hist[i]);
-	  skip = 0;
-	} else {
-	  skip++;
-	  if (skip == 1)
-	    printf("...\n"); // skip intervals without samples, write "..." only once
-	}
-	for (j = 0; j < delay_hist[i]; j+= graph_step) {
-	  printf("#");
-	}
-	if (skip == 0)
-	  printf("\n");
-      }
-
-      if (max_delay * 1000.0 > 6.0) { // latencies <= 6ms are o.k. imho
-	printf("\n> FAIL\n");
-	printf("\n worst latency was %.2f ms, which is too much. Please check:\n\n", max_delay*1000.0);
-	printf("  - if your hardware uses shared IRQs - `watch -n 1 cat /proc/interrupts`\n");
-	printf("    while running this test to see, which IRQs the OS is using for your midi hardware,\n\n");
-	printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
-	printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
-	printf(" Have a look at\n");
-	printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
-	printf(" to find out, howto fix issues with high midi latencies.\n\n");
-	
-	snd_seq_close(seq);
-	return EXIT_FAILURE;
-
-      } else {
-	printf("\n> SUCCESS\n");
-	printf("\n worst latency was %.2f ms, which is great.\n\n", max_delay*1000.0);
-
-	snd_seq_close(seq);
-	return EXIT_SUCCESS;
-      }
-
+    if (stop) {
       break;
     }
   }
 
-  snd_seq_close(seq);
-  return EXIT_SUCCESS;
+  printf("\n> done.\n\n> latency distribution:\n");
+
+  // try to make ascii bars thinner than 50 columns
+  int max_samples = 1;
+  for (i = 0; i < 9999; ++i) {
+    if (delay_hist[i] > max_samples) max_samples = delay_hist[i];
+  }
+  int graph_step = (int)((float)(max_samples / 50.0));
+
+  // plot ascii bars
+  int skip = 0;
+  for (i = 0; i < max_delay * 10000; i++) {
+    if (delay_hist[i] > 0) {
+      printf("%5.1f -%5.1f ms: %8ld ", i/10.0, i/10.0 + 0.09, delay_hist[i]);
+      skip = 0;
+    } else {
+      skip++;
+      if (skip == 1)
+	printf("...\n"); // skip intervals without samples, write "..." only once
+    }
+    for (j = 0; j < delay_hist[i]; j+= graph_step) {
+      printf("#");
+    }
+    if (skip == 0)
+      printf("\n");
+  }
+
+  if (max_delay * 1000.0 > 6.0) { // latencies <= 6ms are o.k. imho
+    printf("\n> FAIL\n");
+    printf("\n worst latency was %.2f ms, which is too much. Please check:\n\n", max_delay*1000.0);
+    printf("  - if your hardware uses shared IRQs - `watch -n 1 cat /proc/interrupts`\n");
+    printf("    while running this test to see, which IRQs the OS is using for your midi hardware,\n\n");
+    printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
+    printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
+    printf(" Have a look at\n");
+    printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
+    printf(" to find out, howto fix issues with high midi latencies.\n\n");
+	
+    snd_seq_close(seq);
+    return EXIT_FAILURE;
+
+  } else {
+    printf("\n> SUCCESS\n");
+    printf("\n worst latency was %.2f ms, which is great.\n\n", max_delay*1000.0);
+
+    snd_seq_close(seq);
+    return EXIT_SUCCESS;
+  }
 }
