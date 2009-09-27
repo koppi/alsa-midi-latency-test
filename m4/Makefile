@@ -29,36 +29,32 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = i486-pc-linux-gnu
-host_triplet = i486-pc-linux-gnu
+build_triplet = i686-pc-linux-gnu
+host_triplet = i686-pc-linux-gnu
 subdir = m4
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/gettext.m4 \
-	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/lib-ld.m4 \
-	$(top_srcdir)/m4/lib-link.m4 $(top_srcdir)/m4/lib-prefix.m4 \
-	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(install_sh) -d
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/include/aconfig.h
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /opt/tmp/alsa-midi-latency-test-0.0.1/missing --run aclocal-1.10
+ACLOCAL = ${SHELL} /home/koppi/alsa-midi-latency-test/missing --run aclocal-1.10
 ALSA_CFLAGS = 
 ALSA_LIBS =  -lasound -lm -ldl -lpthread
-AMTAR = ${SHELL} /opt/tmp/alsa-midi-latency-test-0.0.1/missing --run tar
-AUTOCONF = ${SHELL} /opt/tmp/alsa-midi-latency-test-0.0.1/missing --run autoconf
-AUTOHEADER = ${SHELL} /opt/tmp/alsa-midi-latency-test-0.0.1/missing --run autoheader
-AUTOMAKE = ${SHELL} /opt/tmp/alsa-midi-latency-test-0.0.1/missing --run automake-1.10
+AMTAR = ${SHELL} /home/koppi/alsa-midi-latency-test/missing --run tar
+AUTOCONF = ${SHELL} /home/koppi/alsa-midi-latency-test/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/koppi/alsa-midi-latency-test/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/koppi/alsa-midi-latency-test/missing --run automake-1.10
 AWK = gawk
-CC = i486-linux-gnu-gcc
+CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Wall -g -O2
-CPP = i486-linux-gnu-gcc -E
+CFLAGS = -g -O2
+CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -68,6 +64,7 @@ ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
 EXEEXT = 
+GETTEXT_MACRO_VERSION = 0.17
 GMSGFMT = /usr/bin/msgfmt
 GMSGFMT_015 = /usr/bin/msgfmt
 GREP = /bin/grep
@@ -87,7 +84,7 @@ LN_S = ln -s
 LTLIBICONV = -liconv
 LTLIBINTL = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /opt/tmp/alsa-midi-latency-test-0.0.1/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/koppi/alsa-midi-latency-test/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 MSGFMT = /usr/bin/msgfmt
 MSGFMT_015 = /usr/bin/msgfmt
@@ -108,20 +105,21 @@ USE_NLS = yes
 VERSION = 0.0.1
 XGETTEXT = /usr/bin/xgettext
 XGETTEXT_015 = /usr/bin/xgettext
-abs_builddir = /opt/tmp/alsa-midi-latency-test-0.0.1/m4
-abs_srcdir = /opt/tmp/alsa-midi-latency-test-0.0.1/m4
-abs_top_builddir = /opt/tmp/alsa-midi-latency-test-0.0.1
-abs_top_srcdir = /opt/tmp/alsa-midi-latency-test-0.0.1
-ac_ct_CC = 
+XGETTEXT_EXTRA_OPTIONS = 
+abs_builddir = /home/koppi/alsa-midi-latency-test/m4
+abs_srcdir = /home/koppi/alsa-midi-latency-test/m4
+abs_top_builddir = /home/koppi/alsa-midi-latency-test
+abs_top_srcdir = /home/koppi/alsa-midi-latency-test
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
-build = i486-pc-linux-gnu
-build_alias = i486-linux-gnu
-build_cpu = i486
+build = i686-pc-linux-gnu
+build_alias = 
+build_cpu = i686
 build_os = linux-gnu
 build_vendor = pc
 builddir = .
@@ -130,20 +128,20 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = i486-pc-linux-gnu
-host_alias = i486-linux-gnu
-host_cpu = i486
+host = i686-pc-linux-gnu
+host_alias = 
+host_cpu = i686
 host_os = linux-gnu
 host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
-infodir = ${prefix}/share/info
-install_sh = $(SHELL) /opt/tmp/alsa-midi-latency-test-0.0.1/install-sh
+infodir = ${datarootdir}/info
+install_sh = $(SHELL) /home/koppi/alsa-midi-latency-test/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
 localstatedir = ${prefix}/var
-mandir = ${prefix}/share/man
+mandir = ${datarootdir}/man
 mkdir_p = /bin/mkdir -p
 oldincludedir = /usr/include
 pdfdir = ${docdir}
@@ -170,9 +168,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  m4/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  m4/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  m4/Makefile
+	  $(AUTOMAKE) --gnu  m4/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

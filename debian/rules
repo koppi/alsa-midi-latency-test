@@ -29,9 +29,7 @@ clean: unpatch
 configure: debian/stamp-patched configure-stamp
 configure-stamp:
 	dh_testdir
-	-rm -f config.sub config.guess
-	ln -s /usr/share/misc/config.sub config.sub
-	ln -s /usr/share/misc/config.guess config.guess
+	sh autogen.sh
 	./configure --prefix=/usr \
 		    --mandir=\$${prefix}/share/man \
 		    --infodir=\$${prefix}/share/info \
