@@ -44,6 +44,7 @@ Results of some benchmarks created with alsa-midi-latency-test can be found
 in the benchmarks/ sub-directory. The setup of the MIDI-chains of the results
 is as follows:
 
+ * gm5x5x5.txt:         PC -> Polytec GM5 www.midibox.org -> PC
  * ua25ex.txt:          PC -> Edirol UA-25EX -> PC
  * midisport2x2ann.txt: PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC
  * mpu401.txt:          PC -> MPU-401-Port on motherboard -> PC

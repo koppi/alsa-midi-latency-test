@@ -1,0 +1,39 @@
+> alsa-midi-latency-test 0.0.2
+> set_realtime_priority(SCHED_FIFO, 99).. done.
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       2.56;       2.56
+  1715;       3.00;       3.00
+  1811;       3.01;       3.01
+  2665;       3.03;       3.03
+  9999;       1.99;       3.03
+> done.
+
+> latency distribution:
+...
+  1.2 -  1.3 ms:        3 #
+  1.3 -  1.4 ms:        2 #
+  1.4 -  1.5 ms:        1 #
+  1.5 -  1.6 ms:        2 #
+  1.6 -  1.7 ms:        1 #
+  1.7 -  1.8 ms:        3 #
+  1.8 -  1.9 ms:       12 #
+  1.9 -  2.0 ms:      122 #
+  2.0 -  2.1 ms:     9797 ##################################################
+  2.1 -  2.2 ms:       26 #
+  2.2 -  2.3 ms:        6 #
+  2.3 -  2.4 ms:        1 #
+...
+  2.6 -  2.7 ms:        1 #
+...
+  2.9 -  3.0 ms:        4 #
+  3.0 -  3.1 ms:       19 #
+
+> SUCCESS
+
+ worst latency was 3.03 ms, which is great.
+
