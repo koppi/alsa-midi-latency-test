@@ -1,3 +1,4 @@
+> alsa-midi-latency-test 0.0.1
 > calbrating high precision timer loop.. done.
 time diff =                           0.00
 loops/sec =            8661432571218325.00

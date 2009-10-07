@@ -46,6 +46,8 @@ is as follows:
 
  * ua25ex.txt:          PC -> Edirol UA-25EX -> PC
  * midisport2x2ann.txt: PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC
+ * mpu401.txt:          PC -> MPU-401-Port on motherboard -> PC
+ * um2ex.txt:           PC -> Edirol UM-2EX -> PC
 
 If you have an interesting setup, please send us you results so we can include
 them here for further reference.
@@ -72,6 +74,8 @@ The project is hosted at github.com:
 == Thanks ==
 
  * to Arnout Engelen for initial testing and giving feedback.
+ * to Clemens Ladisch for a number of fixes with the high precision timer and
+   alsa midi event handling.
 
 == BUGS and AUTHORS ==
 

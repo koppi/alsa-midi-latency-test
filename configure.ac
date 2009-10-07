@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
 AC_INIT(src/alsa-midi-latency-test.c)
 AC_PREFIX_DEFAULT(/usr)
-AM_INIT_AUTOMAKE(alsa-midi-latency-test, 0.0.1)
+AM_INIT_AUTOMAKE(alsa-midi-latency-test, 0.0.2)
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.15])
