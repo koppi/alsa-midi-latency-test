@@ -6,6 +6,7 @@
 #include <time.h>
 #include <signal.h>
 #include <sched.h>
+#include <poll.h>
 #include <getopt.h>
 #include <alsa/asoundlib.h>
 
@@ -112,7 +113,7 @@ static void usage(const char *argv0)
 
 static void version(void)
 {
-	printf("%s %s\n", PACKAGE, VERSION);
+	printf("> %s %s\n", PACKAGE, VERSION);
 }
 
 static unsigned int timespec_sub(const struct timespec *a,
@@ -212,6 +213,10 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 	}
+	if (argc == 1 || argv[optind]) {
+		usage(argv[0]);
+		return EXIT_FAILURE;
+	}
 
 	err = snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0);
 	check_snd("open sequencer", err);
@@ -242,6 +247,8 @@ int main(int argc, char *argv[])
 	check_snd("connect output port", err);
 	err = snd_seq_connect_from(seq, port, input_addr.client, input_addr.port);
 	check_snd("connect input port", err);
+
+        version();
 
 	if (do_realtime) {
 		printf("> set_realtime_priority(SCHED_FIFO, %d).. ", rt_prio);
@@ -284,8 +291,14 @@ int main(int argc, char *argv[])
 	snd_seq_ev_set_direct(&ev);
 	snd_seq_ev_set_noteon(&ev, 0, 60, 127);
 
+	int pollfds_count = snd_seq_poll_descriptors_count(seq, POLLIN);
+	struct pollfd *pollfds = alloca(pollfds_count * sizeof *pollfds);
+	err = snd_seq_poll_descriptors(seq, pollfds, pollfds_count, POLLIN);
+	check_snd("get poll descriptors", err);
+	pollfds_count = err;
+
 	unsigned int sample_nr = 0;
-	unsigned int max_delay = 0;
+	unsigned int min_delay = UINT_MAX, max_delay = 0;
 	for (c = 0; c < nr_samples; ++c) {
 		clock_gettime(CLOCK_MONOTONIC, &begin);
 
@@ -293,13 +306,28 @@ int main(int argc, char *argv[])
 		check_snd("output MIDI event", err);
 
 		snd_seq_event_t *rec_ev;
-		do {
-			err = snd_seq_event_input(seq, &rec_ev);
+		for (;;) {
+			rec_ev = NULL;
+			err = poll(pollfds, pollfds_count, 1000);
 			if (signal_received)
+			       break;
+			if (err == 0)
+				fatal("timeout: there seems to be no connection between ports %s and %s", output_name, input_name);
+			if (err < 0)
+				fatal("poll error: %s", strerror(errno));
+			unsigned short revents;
+			err = snd_seq_poll_descriptors_revents(seq, pollfds, pollfds_count, &revents);
+			check_snd("get poll events", err);
+			if (revents & (POLLERR | POLLNVAL))
 				break;
+			if (!(revents & POLLIN))
+				continue;
+			err = snd_seq_event_input(seq, &rec_ev);
 			check_snd("input MIDI event", err);
-		} while (ev.type != SND_SEQ_EVENT_NOTEON);
-		if (signal_received)
+			if (rec_ev->type == SND_SEQ_EVENT_NOTEON)
+				break;
+		}
+		if (!rec_ev)
 			break;
 
 		clock_gettime(CLOCK_MONOTONIC, &end);
@@ -317,6 +345,8 @@ int main(int argc, char *argv[])
 				printf("%6u; %10.2f; %10.2f     \r",
 				       sample_nr, delay_ns / 1000000.0, max_delay / 1000000.0);
 		}
+		if (delay_ns < min_delay)
+			min_delay = delay_ns;
 		delays[sample_nr++] = delay_ns;
 
 		ev.data.note.channel ^= 1; // prevent running status
@@ -359,7 +389,9 @@ int main(int argc, char *argv[])
 				skipped = 0;
 			}
 			printf("%5.1f -%5.1f ms: %8u ", i/10.0, i/10.0 + 0.09, delay_hist[i]);
-			unsigned int bar_width = (delay_hist[i] * 50 + max_samples - 1) / max_samples;
+			unsigned int bar_width = (delay_hist[i] * 50 + max_samples / 2) / max_samples;
+			if (!bar_width && delay_hist[i])
+				bar_width = 1;
 			for (j = 0; j < bar_width; ++j)
 				printf("#");
 			puts("");
@@ -368,25 +400,27 @@ int main(int argc, char *argv[])
 		}
 	}
 
-  if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
-    printf("\n> FAIL\n");
-    printf("\n worst latency was %.2f ms, which is too much. Please check:\n\n", max_delay/1000000.0);
-    printf("  - if your hardware uses shared IRQs - `watch -n 1 cat /proc/interrupts`\n");
-    printf("    while running this test to see, which IRQs the OS is using for your midi hardware,\n\n");
-    printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
-    printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
-    printf(" Have a look at\n");
-    printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
-    printf(" to find out, howto fix issues with high midi latencies.\n\n");
-	
-    snd_seq_close(seq);
-    return EXIT_FAILURE;
+	if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
+		printf("\n> FAIL\n");
+		printf("\n best latency was %.2f ms\n", min_delay / 1000000.0);
+		printf(" worst latency was %.2f ms, which is too much. Please check:\n\n", max_delay/1000000.0);
+		printf("  - if your hardware uses shared IRQs - `watch -n 1 cat /proc/interrupts`\n");
+		printf("    while running this test to see, which IRQs the OS is using for your midi hardware,\n\n");
+		printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
+		printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
+		printf(" Have a look at\n");
+		printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
+		printf(" to find out, howto fix issues with high midi latencies.\n\n");
 
-  } else {
-    printf("\n> SUCCESS\n");
-    printf("\n worst latency was %.2f ms, which is great.\n\n", max_delay/1000000.0);
+		snd_seq_close(seq);
+		return EXIT_FAILURE;
 
-    snd_seq_close(seq);
-    return EXIT_SUCCESS;
-  }
+	} else {
+		printf("\n> SUCCESS\n");
+		printf("\n best latency was %.2f ms\n", min_delay / 1000000.0);
+		printf(" worst latency was %.2f ms, which is great.\n\n", max_delay/1000000.0);
+
+		snd_seq_close(seq);
+		return EXIT_SUCCESS;
+	}
 }
