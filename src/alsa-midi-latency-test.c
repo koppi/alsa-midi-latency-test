@@ -106,7 +106,8 @@ static void usage(const char *argv0)
 	       "                             (default: maximum)\n\n"
 	       "  -S, --samples=# of samples to take for the measurement (default: 10000)\n"
 	       "  -s, --skip=# of samples    to skip at the beginning (default: 0)\n"
-	       "  -w, --wait=ms              time interval between measurements\n\n"
+	       "  -w, --wait=ms              time interval between measurements\n"
+	       "  -r, --random-wait          use random interval between wait and 2*wait\n\n"
 	       "  -h, --help                 this help\n"
 	       "  -V, --version              print current version\n"
 	       "\n", argv0);
@@ -138,6 +139,13 @@ static void wait_ms(double t)
 	nanosleep(&ts, NULL);
 }
 
+/* many thanks to Randall Munroe (http://xkcd.com/221/) */
+static int getRandomNumber(void)
+{
+	return 4; // chosen by fair dice roll.
+	          // guaranteed to be random.
+}
+
 static void sighandler(int sig)
 {
 	signal_received = 1;
@@ -145,7 +153,7 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlo:i:RP:s:S:w:";
+	static char short_options[] = "hVlo:i:RP:s:S:w:r";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
@@ -157,6 +165,7 @@ int main(int argc, char *argv[])
 		{"skip", 1, NULL, 's'},
 		{"samples", 1, NULL, 'S'},
 		{"wait", 1, NULL, 'w'},
+		{"random-wait", 0, NULL, 'r'},
 		{}
 	};
 	int do_list = 0;
@@ -164,6 +173,7 @@ int main(int argc, char *argv[])
 	int rt_prio = sched_get_priority_max(SCHED_FIFO);
 	int skip_samples = 0;
 	int nr_samples = 10000;
+	int random_wait = 0;
 	double wait = 0.0;
 	const char *output_name = NULL;
 	const char *input_name = NULL;
@@ -227,6 +237,9 @@ int main(int argc, char *argv[])
 				wait = 0;
 			}
 			break;
+		case 'r':
+			random_wait = 1;
+			break;
 		default:
 			usage(argv[0]);
 			return EXIT_FAILURE;
@@ -269,6 +282,9 @@ int main(int argc, char *argv[])
 
         version();
 
+	if (random_wait)
+		srand(getRandomNumber());
+
 	if (do_realtime) {
 		printf("> set_realtime_priority(SCHED_FIFO, %d).. ", rt_prio);
 		set_realtime_priority(SCHED_FIFO, rt_prio);
@@ -283,8 +299,12 @@ int main(int argc, char *argv[])
 	printf("> clock resolution: %d.%09ld s\n", (int)begin.tv_sec, begin.tv_nsec);
 	if (begin.tv_sec || begin.tv_nsec > 1000000)
 		puts("WARNING: You do not have a high-resolution clock!");
-	if (wait)
-		printf("> interval between measurements: %.3f ms\n", wait);
+	if (wait) {
+		if (random_wait)
+			printf("> interval between measurements: %.3f .. %.3f ms\n", wait, wait * 2);
+		else
+			printf("> interval between measurements: %.3f ms\n", wait);
+	}
 
 	printf("\n> sampling %d midi latency values - please wait ...\n", nr_samples);
 	printf("> press Ctrl+C to abort test\n");
@@ -322,7 +342,10 @@ int main(int argc, char *argv[])
 	unsigned int min_delay = UINT_MAX, max_delay = 0;
 	for (c = 0; c < nr_samples; ++c) {
 		if (wait) {
-			wait_ms(wait);
+			if (random_wait)
+				wait_ms(wait + rand() * wait / RAND_MAX);
+			else
+				wait_ms(wait);
 			if (signal_received)
 				break;
 		}
