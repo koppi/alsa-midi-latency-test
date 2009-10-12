@@ -105,7 +105,8 @@ static void usage(const char *argv0)
 	       "  -P, --priority=int         scheduling priority, use with -R\n"
 	       "                             (default: maximum)\n\n"
 	       "  -S, --samples=# of samples to take for the measurement (default: 10000)\n"
-	       "  -s, --skip=# of samples    to skip at the beginning (default: 0)\n\n"
+	       "  -s, --skip=# of samples    to skip at the beginning (default: 0)\n"
+	       "  -w, --wait=ms              time interval between measurements\n\n"
 	       "  -h, --help                 this help\n"
 	       "  -V, --version              print current version\n"
 	       "\n", argv0);
@@ -128,6 +129,15 @@ static unsigned int timespec_sub(const struct timespec *a,
 	return diff;
 }
 
+static void wait_ms(double t)
+{
+	struct timespec ts;
+
+	ts.tv_sec = t / 1000;
+	ts.tv_nsec = (t - ts.tv_sec * 1000) * 1000000;
+	nanosleep(&ts, NULL);
+}
+
 static void sighandler(int sig)
 {
 	signal_received = 1;
@@ -135,7 +145,7 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlo:i:RP:s:S:";
+	static char short_options[] = "hVlo:i:RP:s:S:w:";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
@@ -146,6 +156,7 @@ int main(int argc, char *argv[])
 		{"priority", 1, NULL, 'P'},
 		{"skip", 1, NULL, 's'},
 		{"samples", 1, NULL, 'S'},
+		{"wait", 1, NULL, 'w'},
 		{}
 	};
 	int do_list = 0;
@@ -153,6 +164,7 @@ int main(int argc, char *argv[])
 	int rt_prio = sched_get_priority_max(SCHED_FIFO);
 	int skip_samples = 0;
 	int nr_samples = 10000;
+	double wait = 0.0;
 	const char *output_name = NULL;
 	const char *input_name = NULL;
 	snd_seq_addr_t output_addr;
@@ -206,6 +218,13 @@ int main(int argc, char *argv[])
 				printf("> Warning: Given number of samples to take is less or equal zero! ");
 				printf("Setting nr of samples to take to 1.\n");
 				nr_samples = 1;
+			}
+			break;
+		case 'w':
+			wait = atof(optarg);
+			if (wait < 0) {
+				printf("> Warning: Wait time is negative; using zero.\n");
+				wait = 0;
 			}
 			break;
 		default:
@@ -264,6 +283,8 @@ int main(int argc, char *argv[])
 	printf("> clock resolution: %d.%09ld s\n", (int)begin.tv_sec, begin.tv_nsec);
 	if (begin.tv_sec || begin.tv_nsec > 1000000)
 		puts("WARNING: You do not have a high-resolution clock!");
+	if (wait)
+		printf("> interval between measurements: %.3f ms\n", wait);
 
 	printf("\n> sampling %d midi latency values - please wait ...\n", nr_samples);
 	printf("> press Ctrl+C to abort test\n");
@@ -300,6 +321,12 @@ int main(int argc, char *argv[])
 	unsigned int sample_nr = 0;
 	unsigned int min_delay = UINT_MAX, max_delay = 0;
 	for (c = 0; c < nr_samples; ++c) {
+		if (wait) {
+			wait_ms(wait);
+			if (signal_received)
+				break;
+		}
+
 		clock_gettime(CLOCK_MONOTONIC, &begin);
 
 		err = snd_seq_event_output_direct(seq, &ev);
