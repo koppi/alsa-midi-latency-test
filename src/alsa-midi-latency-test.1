@@ -1,4 +1,4 @@
-.TH "ALSA-MIDI-LATENCY-TEST" "1" "0.0.2" "10/2009" ""
+.TH "ALSA-MIDI-LATENCY-TEST" "1" "0.0.3" "10/2009" ""
 .SH NAME
 alsa-midi-latency-test \- tests latency of a MIDI device.
 
@@ -52,6 +52,14 @@ Take given number of samples (default: 10000).
 .TP
 .I \-s,\-\-skip=int
 Skip measuring latency for the given number of samples (default: 0/no sample skip).
+
+.TP
+.I \-w,\-\-wait=ms
+Wait ms milliseconds between measurements (default: 0ms).
+
+.TP
+.I \r,\-\-random-wait
+Wait between wait and 2*wait milliseconds between measurements (default: off/no wait).
 
 .TP
 .I \-h,\-\-help
