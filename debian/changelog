@@ -1,3 +1,23 @@
+alsa-midi-latency-test (0.0.3-1) unstable; urgency=low
+
+  * Clemens Ladisch: added -w and -r options.
+
+ -- Jakob Flierl <jakob.flierl@gmail.com>  Tue, 13 Oct 2009 19:22:27 +0100
+
+alsa-midi-latency-test (0.0.2-1) unstable; urgency=low
+
+  * Clemens Ladisch: High precision timer changes, lots of fixes.
+  * Arnout Engelen: Fix sending notes: the source port is always '0', instead
+    of equal to the destination port.
+  * Arnout Engelen: Improve control flow: collect data inside the while loop,
+    show results outside it.
+  * Arnout Engelen: Always show results, even when collection of data was
+    interrupted.
+  * Improved interruption support: allow interruption when no data is coming 
+    in.
+
+ -- Jakob Flierl <jakob.flierl@gmail.com>  Mon, 12 Oct 2009 11:22:27 +0100
+
 alsa-midi-latency-test (0.0.1-1) unstable; urgency=low
 
   * Initial release.
