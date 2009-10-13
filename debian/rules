@@ -1,7 +1,5 @@
 #!/usr/bin/make -f
 
-include /usr/share/quilt/quilt.make
-
 CFLAGS = -Wall -g
 
 INSTALL_UAG := -o root -g audio
@@ -17,7 +15,7 @@ else
 	CFLAGS += -O2
 endif
 
-clean: unpatch
+clean:
 	dh_testdir
 	dh_clean
 	[ ! -f Makefile ] || $(MAKE) distclean
@@ -26,7 +24,7 @@ clean: unpatch
 	-rm -f config.cache config.log config.status Makefile.conf
 	-rm -f config.sub config.guess
 
-configure: debian/stamp-patched configure-stamp
+configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	sh autogen.sh
@@ -68,4 +66,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary:	binary-indep binary-arch
-.PHONY: build clean binary binary-arch binary-indep install configure patch
+.PHONY: build clean binary binary-arch binary-indep install configure
