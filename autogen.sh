@@ -32,7 +32,7 @@ fi
 
 if test $rc -eq 0; then
 	echo "running automake"
-	automake --add-missing --copy
+	automake -f -i --add-missing --copy
 	rc=$?
 else
 	echo "An error occured, autogen.sh stopping."
