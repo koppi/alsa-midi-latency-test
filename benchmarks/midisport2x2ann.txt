@@ -1,4 +1,4 @@
-arnouten@bird:~/progs/alsa-midi-latency-test$ ./src/alsa-midi-latency-test -s 40 -i 24:1 -o 24:1 -R -w 1 -r
+$ alsa-midi-latency-test -s 40 -i 24:1 -o 24:1 -R -w 1 -r
 > alsa-midi-latency-test 0.0.3
 > set_realtime_priority(SCHED_FIFO, 99).. done.
 > clock resolution: 0.000000001 s
