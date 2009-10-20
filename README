@@ -49,6 +49,7 @@ is as follows:
  * midisport2x2ann.txt: PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC
  * mpu401.txt:          PC -> MPU-401-Port on motherboard -> PC
  * um2ex.txt:           PC -> Edirol UM-2EX -> PC
+ * yamaha-ux256.txt     PC -> Yamaha UX256 (6-Port) -> PC
 
 If you have an interesting setup, please send us you results so we can include
 them here for further reference.
