@@ -46,6 +46,7 @@ is as follows:
  * elektron-tm1.txt:    PC -> Elektron TM-1 -> PC
  * gm5x5x5.txt:         PC -> Polytec GM5 www.midibox.org -> PC
  * ua25ex.txt:          PC -> Edirol UA-25EX -> PC
+ * m-audio-2496.txt     PC -> M-Audio 2496 -> PC
  * midisport2x2ann.txt: PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC
  * mpu401.txt:          PC -> MPU-401-Port on motherboard -> PC
  * um2ex.txt:           PC -> Edirol UM-2EX -> PC

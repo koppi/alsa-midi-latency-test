@@ -1,0 +1,210 @@
+$ cat /etc/*release*
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=9.10
+DISTRIB_CODENAME=karmic
+DISTRIB_DESCRIPTION="Ubuntu 9.10"
+$ uname -r
+2.6.31-9-rt
+$ lspci |grep -i audio
+05:01.0 Multimedia audio controller: VIA Technologies Inc. ICE1712 [Envy24] PCI Multi-Channel I/O Controller (rev 02)
+
+$ cat /proc/asound/cards
+ 1 [M2496          ]: ICE1712 - M Audio Audiophile 24/96
+                      M Audio Audiophile 24/96 at 0xbc00, irq 22
+$ alsa-midi-latency-test -l
+ Port    Client name                      Port name
+ 20:0    M Audio Audiophile 24/96         M Audio Audiophile 24/96 MIDI
+128:0    TiMidity                         TiMidity port 0
+128:1    TiMidity                         TiMidity port 1
+128:2    TiMidity                         TiMidity port 2
+128:3    TiMidity                         TiMidity port 3
+
+$ alsa-midi-latency-test -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.01;       1.01     
+   144;       1.20;       1.20     
+  1615;       1.25;       1.25     
+  2515;       1.36;       1.36     
+  2965;       1.66;       1.66     
+  9999;       0.98;       1.66     
+> done.
+
+> latency distribution:
+...
+  1.0 -  1.1 ms:     9967 ##################################################
+  1.1 -  1.2 ms:       15 #
+  1.2 -  1.3 ms:       10 #
+  1.3 -  1.4 ms:        1 #
+  1.4 -  1.5 ms:        5 #
+  1.5 -  1.6 ms:        1 #
+...
+  1.7 -  1.8 ms:        1 #
+
+> SUCCESS
+
+ best latency was 0.97 ms
+ worst latency was 1.66 ms, which is great.
+
+$ alsa-midi-latency-test -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.01;       1.01     
+   204;       1.49;       1.49     
+  1955;       1.62;       1.62     
+  2966;       1.96;       1.96     
+  3979;       2.11;       2.11     
+  9999;       0.98;       2.11     
+> done.
+
+> latency distribution:
+...
+  1.0 -  1.1 ms:     9961 ##################################################
+  1.1 -  1.2 ms:       19 #
+  1.2 -  1.3 ms:        8 #
+  1.3 -  1.4 ms:        3 #
+  1.4 -  1.5 ms:        4 #
+  1.5 -  1.6 ms:        2 #
+  1.6 -  1.7 ms:        1 #
+...
+  2.0 -  2.1 ms:        1 #
+  2.1 -  2.2 ms:        1 #
+
+> SUCCESS
+
+ best latency was 0.97 ms
+ worst latency was 2.11 ms, which is great.
+
+$ alsa-midi-latency-test -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.02;       1.02     
+    23;       1.55;       1.55     
+  2157;     timeout: there seems to be no connection between ports 20:0 and 20:0
+
+$ alsa-midi-latency-test -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.01;       1.01     
+     4;       1.05;       1.05     
+   805;       1.13;       1.13     
+   863;       1.22;       1.22     
+  1072;       1.72;       1.72     
+  9999;       0.98;       1.72     
+> done.
+
+> latency distribution:
+...
+  1.0 -  1.1 ms:     9952 ##################################################
+  1.1 -  1.2 ms:       20 #
+  1.2 -  1.3 ms:       14 #
+  1.3 -  1.4 ms:        4 #
+  1.4 -  1.5 ms:        4 #
+  1.5 -  1.6 ms:        3 #
+  1.6 -  1.7 ms:        2 #
+  1.7 -  1.8 ms:        1 #
+
+> SUCCESS
+
+ best latency was 0.97 ms
+ worst latency was 1.72 ms, which is great.
+
+$ alsa-midi-latency-test -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.02;       1.02     
+   114;       1.18;       1.18     
+   534;       1.34;       1.34     
+  1885;       1.37;       1.37     
+  2514;       1.63;       1.63     
+  9999;       0.99;       1.63     
+> done.
+
+> latency distribution:
+...
+  1.0 -  1.1 ms:     9959 ##################################################
+  1.1 -  1.2 ms:       19 #
+  1.2 -  1.3 ms:       11 #
+  1.3 -  1.4 ms:        4 #
+  1.4 -  1.5 ms:        4 #
+  1.5 -  1.6 ms:        2 #
+  1.6 -  1.7 ms:        1 #
+
+> SUCCESS
+
+ best latency was 0.97 ms
+ worst latency was 1.63 ms, which is great.
+
+$ alsa-midi-latency-test -R -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> set_realtime_priority(SCHED_FIFO, 99).. done.
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.02;       1.02     
+  6946;       1.02;       1.02     
+  6947;       1.03;       1.03     
+  9999;       0.98;       1.03     
+> done.
+
+> latency distribution:
+...
+  1.0 -  1.1 ms:    10000 ##################################################
+
+> SUCCESS
+
+ best latency was 0.97 ms
+ worst latency was 1.03 ms, which is great.
+
+$ alsa-midi-latency-test -R -i 20:0 -o 20:0
+> alsa-midi-latency-test 0.0.3
+> set_realtime_priority(SCHED_FIFO, 99).. done.
+> clock resolution: 0.000000001 s
+
+> sampling 10000 midi latency values - please wait ...
+> press Ctrl+C to abort test
+
+sample; latency_ms; latency_ms_worst
+     0;       1.01;       1.01     
+    27;       1.04;       1.04     
+  9999;       0.98;       1.04     
+> done.
+
+> latency distribution:
+...
+  1.0 -  1.1 ms:    10000 ##################################################
+
+> SUCCESS
+
+ best latency was 0.97 ms
+ worst latency was 1.04 ms, which is great.
+
+
