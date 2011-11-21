@@ -7,7 +7,7 @@ alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa
 The following libraries are required to build alsa-midi-latency-test: debhelper (>= 5), autotools-dev, automake, libasound2-dev (>= 1.0.13)
 
 ```
-$ sudo apt-get install debhelper autotools-dev automake libasound2-dev
+ $ sudo apt-get install debhelper autotools-dev automake libasound2-dev
 ```
 
 Compile and install alsa-midi-latency-test as follows:
