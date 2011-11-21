@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
 			usage(argv[0]);
 			return EXIT_SUCCESS;
 		case 'V':
-			version();
+			print_version();
 			return EXIT_SUCCESS;
 		case 'l':
 			do_list = 1;
