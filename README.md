@@ -9,7 +9,7 @@ alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa
 ```
  $ wget -O alsa-midi-latency-test.zip https://github.com/koppi/alsa-midi-latency-test/zipball/master
  $ unzip alsa-midi-latency-test.zip
- $ cd alsa-midi-latency-test/
+ $ cd alsa-midi-latency-test*
 ```
 
 or
