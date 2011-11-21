@@ -10,12 +10,22 @@
 #include <getopt.h>
 #include <alsa/asoundlib.h>
 
+#include <sys/utsname.h>
+
 #define DEBUG 1
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof *(a))
 
 static snd_seq_t *seq;
 static volatile sig_atomic_t signal_received = 0;
+
+void print_uname()
+{
+  struct utsname u;
+  uname (&u);
+  printf ("> running on %s release %s (version %s) on %s\n",
+	  u.sysname, u.release, u.version, u.machine);
+}
 
 /* prints an error message to stderr, and dies */
 static void fatal(const char *msg, ...)
@@ -113,7 +123,7 @@ static void usage(const char *argv0)
 	       "\n", argv0);
 }
 
-static void version(void)
+static void print_version(void)
 {
 	printf("> %s %s\n", PACKAGE, VERSION);
 }
@@ -280,7 +290,8 @@ int main(int argc, char *argv[])
 	err = snd_seq_connect_from(seq, port, input_addr.client, input_addr.port);
 	check_snd("connect input port", err);
 
-        version();
+        print_version();
+	print_uname();
 
 	if (random_wait)
 		srand(getRandomNumber());
