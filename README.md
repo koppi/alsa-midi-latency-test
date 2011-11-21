@@ -32,20 +32,17 @@ Or build and install an Ubuntu / Debian package:
 Run alsa-midi-latency-test as follows:
 
  * ```$ alsa-midi-latency-test -l```
-
    Lists available MIDI input and output ports.
 
  * ```$ alsa-midi-latency-test -i [input port] -o [output port]```
-
    This runs the benchmark with the given input and output port. Note, that the
    input and output ports have to be connected using a MIDI cable in the real
    hardware to loop the MIDI message back.
 
  * ```$ man alsa-midi-latency-test```
-
    The man page contains documentation for all available command line switches.
 
-## Results
+## Benchmark Results
 
 Results of some benchmarks created with alsa-midi-latency-test can be found in the benchmarks/ sub-directory. The setup of the MIDI-chains of the results is as follows:
 
@@ -63,21 +60,13 @@ If you have an interesting setup, please send us you results so we can include t
 ## See also
 
  * http://www.linuxaudio.org/mailarchive/lat/
-
    The linux-audio tuning (LAT) mailing list is to help GNU/Linux distribution
    maintainers  and  other interested users to share information on system
    performance tuning matters, especially with regard to real-time Linux
    kernels.
 
  * http://www.alsa-project.org
-
    The Advanced Linux Sound Architecture.
-
-## Website
-
-The project is hosted at github.com:
-
- http://github.com/koppi/alsa-midi-latency-test/tree/master
 
 ## Thanks
 
@@ -87,7 +76,7 @@ The project is hosted at github.com:
 
 ## BUGS and AUTHORS
 
-This is an early release.  Please report bugs to the authors.
+Please report bugs to the authors.
 
  * Jakob Flierl <jakob.flierl@gmail.com>
 
