@@ -31,17 +31,17 @@ else
 fi
 
 if test $rc -eq 0; then
-	echo "running automake"
-	automake -f -i --add-missing --copy
-	rc=$?
+        echo "running autoheader"
+        autoheader
+        rc=$?
 else
-	echo "An error occured, autogen.sh stopping."
-	exit $rc
+        echo "An error occured, autogen.sh stopping."
+        exit $rc
 fi
 
 if test $rc -eq 0; then
-	echo "running autoheader"
-	autoheader
+	echo "running automake"
+	automake -f -i --add-missing --copy
 	rc=$?
 else
 	echo "An error occured, autogen.sh stopping."
