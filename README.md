@@ -49,8 +49,8 @@ Run alsa-midi-latency-test as follows:
 
 Results of some benchmarks created with alsa-midi-latency-test can be found in the benchmarks/ sub-directory. The setup of the MIDI-chains of the results is as follows:
 
- * [PC -> Elektron TM-1 -> PC](elektron-tm1.txt)
- * gm5x5x5.txt:         [PC -> Polytec GM5 www.midibox.org -> PC]
+ * [PC -> Elektron TM-1 -> PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
+ * [PC -> Polytec GM5 www.midibox.org -> PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
  * ua25ex.txt:          [PC -> Edirol UA-25EX -> PC]
  * m-audio-2496.txt     [PC -> M-Audio 2496 -> PC]
  * midisport2x2ann.txt: [PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC]
