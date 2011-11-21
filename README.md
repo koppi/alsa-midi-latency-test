@@ -94,6 +94,8 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 2010
 
+ * [drummerforum.de](http://www.drummerforum.de/forum/)
+     * [siktuned - Asio 4 all mit addictive drums problem mit latenz](http://www.drummerforum.de/forum/48500-asio-4-all-mit-addictive-drums-problem-mit-latenz.html#post787463)
  * [ffado.org](http://subversion.ffado.org/wiki/)
      * [IRQ Priorities How-To](http://subversion.ffado.org/wiki/IrqPriorities)
  * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
