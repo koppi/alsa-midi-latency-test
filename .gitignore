@@ -35,6 +35,8 @@ configure-stamp
 
 # debian related stuff
 debian/alsa-midi-latency-test
+debian/alsa-midi-latency-test.substvars
+debian/alsa-midi-latency-test.debhelper.log
 
 # generated makefiles
 include/Makefile
