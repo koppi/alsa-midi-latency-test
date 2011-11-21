@@ -86,7 +86,7 @@ Benchmark results for various MIDI adapters can be found in [benchmarks/](alsa-m
 
 If you have an interesting setup, please send [us](https://github.com/koppi) you results so we can include them here for further reference.
 
-### User Experiences with alsa-midi-latency-test
+### User Experiences - Archive
 
 2011
 
@@ -101,7 +101,13 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
      * [Ralf Mardorf - Correlation of alsa -p value and hw MIDI jitter](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02109.html)
      * [Ralf Mardorf - MIDI jitter - Today for 4 of 4 tests my USB device did pass all tests](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02089.html)
      * [Ralf Mardorf - ALSA MIDI latency test results are far away from	reality](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02104.html)
+ * [ubuntu-studio-users](https://lists.ubuntu.com/archives/ubuntu-studio-users/)
+     * [Ralf Mardorf - Real time for Ubuntu Studio 10.04 amd64](https://lists.ubuntu.com/archives/ubuntu-studio-users/2010-July/006392.html)
 
+2009
+
+ * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
+     * [geoff - MIDI timing](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg01635.html)
 
 ## See also
 
