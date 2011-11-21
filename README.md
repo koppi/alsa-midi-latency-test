@@ -2,7 +2,7 @@
 
 alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa subsystem of the linux kernel using a high precision timer. It calculates the worst case roundtrip time of all sent MIDI messages and displays a histogram of the rountrip time jitter.
 
-## Compiling, installing and running
+## Compile / Install
 
 The following libraries are required to build alsa-midi-latency-test:
 
@@ -28,6 +28,8 @@ Or build and install an Ubuntu / Debian package:
  $ debuild
  $ sudo dpkg -i ../alsa-midi-latency-test*.deb
 ```
+
+## Run
 
 Run alsa-midi-latency-test as follows:
 
