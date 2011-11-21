@@ -4,6 +4,21 @@ alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa
 
 ![alsa-midi-latency-test](https://raw.github.com/koppi/alsa-midi-latency-test/master/alsa-midi-latency-test.gif "alsa midi latency test")
 
+## Get the source code
+
+```
+ $ wget -O alsa-midi-latency-test.zip https://github.com/koppi/alsa-midi-latency-test/zipball/master
+ $ unzip alsa-midi-latency-test.zip
+ $ cd alsa-midi-latency-test/
+```
+
+or
+
+```
+ $ git clone https://koppi@github.com/koppi/alsa-midi-latency-test.git
+ $ cd alsa-midi-latency-test/
+```
+
 ## Compile / Install
 
 The following libraries are required to build alsa-midi-latency-test: debhelper (>= 5), autotools-dev, automake, libasound2-dev (>= 1.0.13)
