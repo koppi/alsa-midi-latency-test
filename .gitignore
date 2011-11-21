@@ -1,5 +1,15 @@
+## generic files to ignore
+*.lock
+*.DS_Store
+*.swp
+*.out
+*~
 *.o
+
+# ctags etags stuff
 TAGS
+
+# autoconf stuff
 autom4te.cache
 Makefile
 Makefile.in
@@ -10,28 +20,28 @@ configure
 config.log
 config.status
 libtool
-
 aclocal.m4
 include/Makefile.in
 include/aconfig.h.in
 m4/Makefile
 m4/Makefile.in
 src/Makefile.in
-
 build-stamp
 config.guess
 config.status
 config.sub
-
 configure
 configure-stamp
 
+# debian related stuff
 debian/alsa-midi-latency-test
 
+# generated makefiles
 include/Makefile
 include/aconfig.h
 include/stamp-h1
 
+# more autoconf generated stuff
 install-sh
 ltmain.sh
 m4/libtool.m4
@@ -41,6 +51,26 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 missing
 
+# more generated files
 src/Makefile
 src/alsa-midi-latency-test
+
+# java specific
+*.class
+
+# python specific
+*.pyc
+
+# xcode iphone project stuff
+build/*
+*.pbxuser
+*.mode2v3
+*.mode1v3
+*.perspective
+*.perspectivev3
+*~.nib
+
+# also ignore private workspace stuff added by Xcode4
+xcuserdata
+project.xcworkspace
 
