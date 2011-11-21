@@ -46,13 +46,13 @@ Or build an Ubuntu / Debian package:
 
 ## Benchmark Results
 
-Results of some benchmarks created with alsa-midi-latency-test can be found in the benchmarks/ sub-directory. The setup of the MIDI-chains of the results is as follows:
+Results of some benchmarks created with alsa-midi-latency-test can be found in the [benchmarks/](alsa-midi-latency-test/blob/master/benchmarks) directory. The setup of the MIDI loop chains is as follows:
 
- * [PC - Elektron TM-1 - PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
- * [PC - Polytec GM5 midibox - PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
- * [PC - Edirol UA-25EX - PC](alsa-midi-latency-test/blob/master/benchmarks/)
+ * [PC - USB - Elektron TM-1 OUT - MIDI loop - Elektron TM-1 IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
+ * [PC - USB - Polytec GM5 midibox OUT - MIDI loop - Polytec GM5 midibox IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
+ * [PC - Edirol UA-25EX - PC](alsa-midi-latency-test/blob/master/benchmarks/um2ex.txt)
  * [PC - M-Audio 2496 - PC](alsa-midi-latency-test/blob/master/benchmarks/m-audio-2496.txt)
- * [PC - MidiSport 2x2 'Anniversary Edition' port B - PC](alsa-midi-latency-test/blob/master/benchmarks/midisport2x2ann.txt)
+ * [PC - USB - MidiSport 2x2 'Anniversary Edition' port B OUT - MidiSport 2x2 'Anniversary Edition' port B IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/midisport2x2ann.txt)
  * [PC - MPU-401-Port on motherboard - PC](alsa-midi-latency-test/blob/master/benchmarks/mpu401.txt)
  * [PC - Edirol UM-2EX - PC](alsa-midi-latency-test/blob/master/benchmarks/um2ex.txt)
  * [PC - Yamaha UX256 (6-Port) - PC](alsa-midi-latency-test/blob/master/benchmarks/yamaha-ux256.txt)
@@ -71,6 +71,10 @@ If you have an interesting setup, please send us you results so we can include t
  * http://www.alsa-project.org/
 
     The Advanced Linux Sound Architecture.
+
+ * http://earthvegaconnection.com/evc/products/miditest
+
+    The MidiTest software for Microsoft Windows.
 
 ## Thanks
 
