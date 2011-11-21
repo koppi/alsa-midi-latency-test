@@ -105,6 +105,8 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
      * [Ralf Mardorf - ALSA MIDI latency test results are far away from	reality](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02104.html)
  * [ubuntu-studio-users](https://lists.ubuntu.com/archives/ubuntu-studio-users/)
      * [Ralf Mardorf - Real time for Ubuntu Studio 10.04 amd64](https://lists.ubuntu.com/archives/ubuntu-studio-users/2010-July/006392.html)
+ * Blog Posts
+     * [Matt Wheeler's Blog - Putting -rt kernels first in grub2](http://funkyhat.org/2010/01/19/putting-rt-kernels-first-in-grub2/)
 
 2009
 
