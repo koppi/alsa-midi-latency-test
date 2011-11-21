@@ -97,7 +97,9 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
  * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
      * [Ralf Mardorf - USB Device 0x170b:0x11, TerraTec EWX24/96](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02047.html)
      * [Ralf Mardorf - Correlation of alsa -p value and hw MIDI jitter](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02109.html)
-     * [Ralf Mardorf -MIDI jitter - Today for 4 of 4 tests my USB device did pass all tests](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02089.html)
+     * [Ralf Mardorf - MIDI jitter - Today for 4 of 4 tests my USB device did pass all tests](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02089.html)
+     * [Ralf Mardorf - ALSA MIDI latency test results are far away from	reality](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02104.html)
+
 
 ## See also
 
