@@ -115,10 +115,16 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
  * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
      * [geoff - MIDI timing](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg01635.html)
 
+...
+
+2000
+
+ * [Benno Senoner - scheduling latency tests / high performance low latency audio](http://www.gardena.net/benno/linux/audio/)
+
 ### Definitions
 
- * [Wikipedia EN - Latency (engineering)](http://en.wikipedia.org/wiki/Latency_(engineering))
- * [Wikipedia EN - Latency (audio)](http://en.wikipedia.org/wiki/Latency_(audio))
+ * [Wikipedia EN - Latency in engineering](http://en.wikipedia.org/wiki/Latency_(engineering))
+ * [Wikipedia EN - Latency with audio](http://en.wikipedia.org/wiki/Latency_(audio))
 
 ## See also
 
