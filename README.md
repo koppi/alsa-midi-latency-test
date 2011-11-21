@@ -118,6 +118,7 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 ### Definitions
 
  * [Wikipedia EN - Latency (engineering)](http://en.wikipedia.org/wiki/Latency_(engineering))
+ * [Wikipedia EN - Latency (audio)](http://en.wikipedia.org/wiki/Latency_(audio))
 
 ## See also
 
