@@ -26,21 +26,19 @@ Or build an Ubuntu / Debian package:
  $ sudo dpkg -i ../alsa-midi-latency-test*.deb
 ```
 
-## Run
+## Run alsa-midi-latency-test
 
-Run alsa-midi-latency-test as follows:
-
- * ```$ alsa-midi-latency-test -l```
+ * ``` $ alsa-midi-latency-test -l ```
 
     Lists available MIDI input and output ports.
 
- * ```$ alsa-midi-latency-test -i [input port] -o [output port]```
+ * ``` $ alsa-midi-latency-test -i [input port] -o [output port] ```
 
     This runs the benchmark with the given input and output port. Note, that the
     input and output ports have to be connected using a MIDI cable in the real
     hardware to loop the MIDI message back.
 
- * ```$ man alsa-midi-latency-test```
+ * ``` $ man alsa-midi-latency-test ```
 
     The man page contains documentation for all available command line switches.
 
