@@ -115,6 +115,10 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
  * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
      * [geoff - MIDI timing](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg01635.html)
 
+### Definitions
+
+ * [Wikipedia EN - Latency (engineering)](http://en.wikipedia.org/wiki/Latency_(engineering))
+
 ## See also
 
  * http://www.linuxaudio.org/mailarchive/lat/
