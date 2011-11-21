@@ -24,7 +24,7 @@ Compile and install alsa-midi-latency-test as follows:
  $ sudo make install
 ```
 
-Or build and install an Ubuntu / Debian package:
+Or build an Ubuntu / Debian package:
 
 ```
  $ debuild
