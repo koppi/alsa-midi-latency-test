@@ -94,6 +94,8 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 2010
 
+ * [ffado.org](http://subversion.ffado.org/wiki/)
+     * [IRQ Priorities How-To](http://subversion.ffado.org/wiki/IrqPriorities)
  * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
      * [Ralf Mardorf - PCI MIDI jitter - comparison Ubuntu (bad) and Suse	(might be ok)](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02099.html)
      * [Ralf Mardorf - 3.0b and 3.3a amd64 MIDI latency test for several	kernels](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02103.html)
