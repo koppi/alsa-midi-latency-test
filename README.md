@@ -49,14 +49,14 @@ Run alsa-midi-latency-test as follows:
 
 Results of some benchmarks created with alsa-midi-latency-test can be found in the benchmarks/ sub-directory. The setup of the MIDI-chains of the results is as follows:
 
- * [PC -> Elektron TM-1 -> PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
- * [PC -> Polytec GM5 www.midibox.org -> PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
- * ua25ex.txt:          [PC -> Edirol UA-25EX -> PC]
- * m-audio-2496.txt     [PC -> M-Audio 2496 -> PC]
- * midisport2x2ann.txt: [PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC]
- * mpu401.txt:          [PC -> MPU-401-Port on motherboard -> PC]
- * um2ex.txt:           [PC -> Edirol UM-2EX -> PC]
- * yamaha-ux256.txt     [PC -> Yamaha UX256 (6-Port) -> PC]
+ * [PC - Elektron TM-1 - PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
+ * [PC - Polytec GM5 midibox - PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
+ * [PC - Edirol UA-25EX - PC](alsa-midi-latency-test/blob/master/benchmarks/)
+ * [PC - M-Audio 2496 - PC](alsa-midi-latency-test/blob/master/benchmarks/m-audio-2496.txt)
+ * [PC - MidiSport 2x2 'Anniversary Edition' port B - PC](alsa-midi-latency-test/blob/master/benchmarks/midisport2x2ann.txt)
+ * [PC - MPU-401-Port on motherboard - PC](alsa-midi-latency-test/blob/master/benchmarks/mpu401.txt)
+ * [PC - Edirol UM-2EX - PC](alsa-midi-latency-test/blob/master/benchmarks/um2ex.txt)
+ * [PC - Yamaha UX256 (6-Port) - PC](alsa-midi-latency-test/blob/master/benchmarks/yamaha-ux256.txt)
 
 If you have an interesting setup, please send us you results so we can include them here for further reference.
 
