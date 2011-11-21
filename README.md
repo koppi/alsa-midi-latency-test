@@ -112,6 +112,8 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 2009
 
+ * [rt.wiki.kernel.org](https://rt.wiki.kernel.org/)
+     * [Geunsik Lim - Worstcase Latency Test Scenario](https://rt.wiki.kernel.org/articles/w/o/r/Worstcase_Latency_Test_Scenario_72eb.html)
  * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
      * [geoff - MIDI timing](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg01635.html)
 
