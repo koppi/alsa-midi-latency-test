@@ -120,7 +120,7 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 #### 2000
 
- * [Benno Senoner - scheduling latency tests / high performance low latency audio](http://www.gardena.net/benno/linux/audio/)
+ * [Benno Senoner - Linux v2.4 - scheduling latency tests / high performance low latency audio](http://www.gardena.net/benno/linux/audio/)
 
 ### Definitions
 
