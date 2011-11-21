@@ -11,8 +11,7 @@ The following libraries are required to build alsa-midi-latency-test:
  * automake
  * libasound2-dev (>= 1.0.13)
 
-```
- $ sudo apt-get install debhelper autotools-dev automake libasound2-dev
+```$ sudo apt-get install debhelper autotools-dev automake libasound2-dev```
 
 Compile and install alsa-midi-latency-test as follows:
 
@@ -23,19 +22,26 @@ Compile and install alsa-midi-latency-test as follows:
  $ sudo make install
 ```
 
+Or build and install an Ubuntu / Debian package:
+
+```
+ $ debuild
+ $ sudo dpkg -i ../
+```
+
 Run alsa-midi-latency-test as follows:
 
-```$ alsa-midi-latency-test -l```
+ * ```$ alsa-midi-latency-test -l```
 
    Lists available MIDI input and output ports.
 
-```$ alsa-midi-latency-test -i [input port] -o [output port]```
+ * ```$ alsa-midi-latency-test -i [input port] -o [output port]```
 
    This runs the benchmark with the given input and output port. Note, that the
    input and output ports have to be connected using a MIDI cable in the real
    hardware to loop the MIDI message back.
 
-```$ man alsa-midi-latency-test```
+ * ```$ man alsa-midi-latency-test```
 
    The man page contains documentation for all available command line switches.
 
@@ -43,14 +49,14 @@ Run alsa-midi-latency-test as follows:
 
 Results of some benchmarks created with alsa-midi-latency-test can be found in the benchmarks/ sub-directory. The setup of the MIDI-chains of the results is as follows:
 
- * elektron-tm1.txt:    PC -> Elektron TM-1 -> PC
- * gm5x5x5.txt:         PC -> Polytec GM5 www.midibox.org -> PC
- * ua25ex.txt:          PC -> Edirol UA-25EX -> PC
- * m-audio-2496.txt     PC -> M-Audio 2496 -> PC
- * midisport2x2ann.txt: PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC
- * mpu401.txt:          PC -> MPU-401-Port on motherboard -> PC
- * um2ex.txt:           PC -> Edirol UM-2EX -> PC
- * yamaha-ux256.txt     PC -> Yamaha UX256 (6-Port) -> PC
+ * [PC -> Elektron TM-1 -> PC](elektron-tm1.txt)
+ * gm5x5x5.txt:         [PC -> Polytec GM5 www.midibox.org -> PC]
+ * ua25ex.txt:          [PC -> Edirol UA-25EX -> PC]
+ * m-audio-2496.txt     [PC -> M-Audio 2496 -> PC]
+ * midisport2x2ann.txt: [PC -> MidiSport 2x2 'Anniversary Edition' port B -> PC]
+ * mpu401.txt:          [PC -> MPU-401-Port on motherboard -> PC]
+ * um2ex.txt:           [PC -> Edirol UM-2EX -> PC]
+ * yamaha-ux256.txt     [PC -> Yamaha UX256 (6-Port) -> PC]
 
 If you have an interesting setup, please send us you results so we can include them here for further reference.
 
