@@ -71,7 +71,7 @@ or build and install an Ubuntu / Debian package:
 
     The man page contains documentation for all available command line switches.
 
-## Benchmark Results
+### Benchmark Results
 
 Benchmark results for various MIDI adapters can be found in [benchmarks/](alsa-midi-latency-test/blob/master/benchmarks). The setup of the MIDI loop back chains is as follows:
 
@@ -84,7 +84,12 @@ Benchmark results for various MIDI adapters can be found in [benchmarks/](alsa-m
  * [PC - Edirol UM-2EX - PC](alsa-midi-latency-test/blob/master/benchmarks/um2ex.txt)
  * [PC - Yamaha UX256 (6-Port) - PC](alsa-midi-latency-test/blob/master/benchmarks/yamaha-ux256.txt)
 
-If you have an interesting setup, please send us you results so we can include them here for further reference.
+If you have an interesting setup, please send [us](https://github.com/koppi) you results so we can include them here for further reference.
+
+### User Experiences with alsa-midi-latency-test
+
+ * [64studio-users](http://www.mail-archive.com/64studio-users@lists.64studio.com)
+     * [Ralf Mardorf - USB Device 0x170b:0x11, TerraTec EWX24/96](http://www.mail-archive.com/64studio-users@lists.64studio.com/msg02047.html)
 
 ## See also
 
