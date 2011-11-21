@@ -61,7 +61,7 @@ Or build an Ubuntu / Debian package:
 
 ## Benchmark Results
 
-Results of some benchmarks created with alsa-midi-latency-test can be found in the [benchmarks/](alsa-midi-latency-test/blob/master/benchmarks) directory. The setup of the MIDI loop chains is as follows:
+Benchmark results for various MIDI adapters can be found in [benchmarks/](alsa-midi-latency-test/blob/master/benchmarks). The setup of the MIDI loop back chains is as follows:
 
  * [PC - USB - Elektron TM-1 OUT - MIDI loop - Elektron TM-1 IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
  * [PC - USB - Polytec GM5 midibox OUT - MIDI loop - Polytec GM5 midibox IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
