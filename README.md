@@ -15,7 +15,7 @@ alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa
 or
 
 ```
- $ git clone https://koppi@github.com/koppi/alsa-midi-latency-test.git
+ $ git clone https://github.com/koppi/alsa-midi-latency-test.git
  $ cd alsa-midi-latency-test/
 ```
 
