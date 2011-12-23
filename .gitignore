@@ -1,3 +1,16 @@
+# debuild stuff
+
+m4/Makefile
+
+config.guess.cdbs-orig
+config.sub.cdbs-orig
+debian/files
+debian/stamp-autotools
+debian/stamp-autotools-files
+debian/stamp-makefile-build
+debian/stamp-makefile-install
+
+
 ## generic files to ignore
 *.lock
 *.DS_Store
