@@ -9,10 +9,10 @@ alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa
 Installing alsa-midi-latency-test is easy on Ubuntu. Just run the following commands from your terminal:
 
 
-```
- $ sudo add-apt-repository ppa:jakob-flierl/ppa-alsa-midi-latency-test
- $ sudo apt-get update
- $ sudo apt-get -y install alsa-midi-latency-test
+```bash
+sudo add-apt-repository -y ppa:jakob-flierl/ppa-alsa-midi-latency-test
+sudo apt-get update
+sudo apt-get -y install alsa-midi-latency-test
 ```
 
 In this way, you will get the latest daily build of alsa-midi-latency-test.
@@ -22,53 +22,53 @@ In this way, you will get the latest daily build of alsa-midi-latency-test.
 If you prefer installing alsa-midi-latency-test from source code, please run the following commands from you terminal:
 
 
-```
- $ wget -O alsa-midi-latency-test.zip https://github.com/koppi/alsa-midi-latency-test/zipball/master
- $ unzip alsa-midi-latency-test.zip
- $ cd alsa-midi-latency-test*
+```bash
+wget -O alsa-midi-latency-test.zip https://github.com/koppi/alsa-midi-latency-test/zipball/master
+unzip alsa-midi-latency-test.zip
+cd alsa-midi-latency-test*
 ```
 
 or
 
-```
- $ git clone https://github.com/koppi/alsa-midi-latency-test.git
- $ cd alsa-midi-latency-test/
+```bash
+git clone https://github.com/koppi/alsa-midi-latency-test.git
+cd alsa-midi-latency-test/
 ```
 
 ### Compile / Install
 
 The following packages are required to build alsa-midi-latency-test:
 
-```
- $ sudo apt-get install debhelper autotools-dev automake libasound2-dev
+```bash
+sudo apt-get install debhelper autotools-dev automake libasound2-dev
 ```
 
 Compile alsa-midi-latency-test as follows:
 
-```
- $ sh autogen.sh
- $ ./configure
- $ make
+```bash
+sh autogen.sh
+./configure
+make
 ```
 
 Install alsa-midi-latency-test as follows:
 
-```
- $ sudo make install
+```bash
+sudo make install
 ```
 
 or use checkinstall:
 
-```
- $ sudo apt-get install checkinstall
- $ sudo checkinstall
+```bash
+sudo apt-get install checkinstall
+sudo checkinstall
 ```
 
 or build and install an Ubuntu / Debian package:
 
-```
- $ debuild
- $ sudo dpkg -i ../alsa-midi-latency-test*.deb
+```bash
+debuild
+sudo dpkg -i ../alsa-midi-latency-test*.deb
 ```
 
 ## Run alsa-midi-latency-test
