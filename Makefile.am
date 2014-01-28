@@ -1,4 +1,4 @@
-INCLUDES=-I$(top_srcdir)/include
+AM_CPPFLAGS=-I$(top_srcdir)/include
 
 SUBDIRS= include src
 EXTRA_DIST= config.rpath config.rpath mkinstalldirs INSTALL TODO README configure
