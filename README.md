@@ -104,9 +104,28 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 ### User Experiences - Archive
 
+#### 2014
+
+ * More to be written. Please share your results.
+
+#### 2013
+
+ * [Robin Gareus - Utility to measure jackaudio MIDI latency](https://github.com/x42/jack_midi_latency)
+   see http://rg42.org/wiki/midilatency for more details
+ * [ Andre Majorel - LAU: ESI Romio II and alsa-midi-latency-test failure](http://linuxaudio.org/mailarchive/lau/2014/1/26/203927)
+
+#### 2012
+
+ * [Silicon Stuff - Serial Port MIDI on the Raspberry Pi](http://www.siliconstuff.com/2012/08/serial-port-midi-on-raspberry-pi.html)
+ * [Clemens Ladisch - comp.audio.jackit: MIDI support for OpenBSD?](http://en.it-usenet.org/thread/11091/12748/)
+ 
+   (The primary purpose is not so much measuring the hardware but the kernel's maximum scheduling delay. The UM-2EX results were done on a very optimized kernel.)
+
 #### 2011
 
- * To be written. Please share your experiences.
+ * [Silicon Stuff - Raspberry Pi Synthesizer](http://www.raspberrypi.org/phpBB3/viewtopic.php?f=38&t=15422&start=25)
+ * [WARPWOOD Wiki](http://www.warpwood.com/wiki/linux-audio/#index9h2)
+ * [Mentoj Dija - cheap usb-audio-interface]()
 
 #### 2010
 
