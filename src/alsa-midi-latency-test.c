@@ -303,10 +303,10 @@ int main(int argc, char *argv[])
 	}
 
 	struct timespec begin, end;
-	if (clock_gettime(CLOCK_MONOTONIC, &begin) < 0)
-		fatal("monotonic clock not supported");
-	if (clock_getres(CLOCK_MONOTONIC, &begin) < 0)
-		fatal("monotonic clock not supported");
+	if (clock_gettime(CLOCK_MONOTONIC_RAW, &begin) < 0)
+		fatal("monotonic raw clock not supported");
+	if (clock_getres(CLOCK_MONOTONIC_RAW, &begin) < 0)
+		fatal("monotonic raw clock not supported");
 	printf("> clock resolution: %d.%09ld s\n", (int)begin.tv_sec, begin.tv_nsec);
 	if (begin.tv_sec || begin.tv_nsec > 1000000)
 		puts("WARNING: You do not have a high-resolution clock!");
@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
 				break;
 		}
 
-		clock_gettime(CLOCK_MONOTONIC, &begin);
+		clock_gettime(CLOCK_MONOTONIC_RAW, &begin);
 
 		err = snd_seq_event_output_direct(seq, &ev);
 		check_snd("output MIDI event", err);
@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
 		if (!rec_ev)
 			break;
 
-		clock_gettime(CLOCK_MONOTONIC, &end);
+		clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 
 		unsigned int delay_ns = timespec_sub(&end, &begin);
 		if (sample_nr < skip_samples) {
