@@ -191,4 +191,4 @@ Please report bugs to the authors.
 
  * Jakob Flierl <jakob.flierl@gmail.com>
 
--- November, 2009, last updated November 2011.
+-- November, 2009, last updated January 2014.
