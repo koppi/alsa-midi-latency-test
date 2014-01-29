@@ -21,4 +21,4 @@ after_success:
   - sudo dpkg -i ../alsa-midi-latency-test*.deb
   - sudo apt-get -f install
   - alsa-midi-latency-test -V
-  - lintian -i ../lsa-midi-latency-test*.dsc
+  - lintian -i ../alsa-midi-latency-test*.dsc
