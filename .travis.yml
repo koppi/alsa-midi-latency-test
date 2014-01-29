@@ -8,7 +8,7 @@ compiler:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq devscripts equivs
+  - sudo apt-get install -qq devscripts equivs lintian
   - mk-build-deps -i -s sudo
 
 # The --preserve-env and --preserve-envar PATH options are to allow
@@ -21,3 +21,4 @@ after_success:
   - sudo dpkg -i ../alsa-midi-latency-test*.deb
   - sudo apt-get -f install
   - alsa-midi-latency-test -V
+  - lintian -i ../lsa-midi-latency-test*.dsc
