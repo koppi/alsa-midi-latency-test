@@ -10,7 +10,7 @@ Installing alsa-midi-latency-test is easy on Ubuntu. Just run the following comm
 
 
 ```bash
-sudo add-apt-repository -y ppa:jakob-flierl/ppa-alsa-midi-latency-test
+sudo add-apt-repository -y ppa:jakob-flierl/alsa-midi-latency-test
 sudo apt-get update
 sudo apt-get -y install alsa-midi-latency-test
 ```
