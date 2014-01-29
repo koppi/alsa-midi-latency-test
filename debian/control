@@ -2,7 +2,6 @@ Source: alsa-midi-latency-test
 Section: sound
 Priority: optional
 Maintainer: Jakob Flierl <jakob.flierl@gmail.com>
-Uploaders: Jakob Flierl <jakob.flierl@gmail.com>
 Build-Depends: cdbs, debhelper (>= 6), libtool, autotools-dev, automake, libasound2-dev (>= 1.0.13)
 Standards-Version: 3.7.3
 Homepage: http://github.com/koppi/alsa-midi-latency-test/
