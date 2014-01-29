@@ -1,3 +1,9 @@
+alsa-midi-latency-test (0.0.4-2ubuntu1) unstable; urgency=low
+
+  * Push version 0.0.4-2.
+
+ -- Jakob Flierl <jakob.flierl@gmail.com>  Wed, 29 Jan 2014 22:26:58 +0100
+
 alsa-midi-latency-test (0.0.4-1ubuntu1) unstable; urgency=low
 
   * Jakob Flierl: change CLOCK_MONOTONIC to CLOCK_MONOTONIC_RAW.
