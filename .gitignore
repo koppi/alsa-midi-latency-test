@@ -66,6 +66,14 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 missing
 
+ABOUT-NLS
+debian/autoreconf.after
+debian/autoreconf.before
+debian/tmp/
+depcomp
+m4/intl.m4
+po/
+
 # more generated files
 src/Makefile
 src/alsa-midi-latency-test
