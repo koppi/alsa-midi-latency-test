@@ -19,4 +19,5 @@ script: debuild --preserve-env --preserve-envvar PATH -i -us -uc -b
 
 after_success:
   - sudo dpkg -i ../alsa-midi-latency-test*.deb
+  - sudo apt-get -f install
   - alsa-midi-latency-test -V
