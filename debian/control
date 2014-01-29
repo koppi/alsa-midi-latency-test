@@ -3,15 +3,16 @@ Section: sound
 Priority: optional
 Maintainer: Jakob Flierl <jakob.flierl@gmail.com>
 Build-Depends: cdbs, debhelper (>= 6), libtool, autotools-dev, automake, libasound2-dev (>= 1.0.13)
-Standards-Version: 3.7.3
-Homepage: http://github.com/koppi/alsa-midi-latency-test/
+Standards-Version: 3.9.4
+Homepage: http://github.com/koppi/alsa-midi-latency-test
 
 Package: alsa-midi-latency-test
-Architecture: any
-Depends: ${shlibs:Depends}, pciutils (>=1:2.1.11-4), lsb-base (>= 3.0-9), linux-sound-base (>= 1.0.15-1), ${misc:Depends}
-Recommends: alsa-base (>= 1.0.15-1)
+Architecture: linux-any
+Depends: {shlibs:Depends}, pciutils (>=1:2.1.11-4), lsb-base (>= 3.0-9), linux-sound-base (>= 1.0.15-1), ${misc:Depends}
+Recommends: alsa-base (>= 1.0.15)
 Conflicts: udev (<< 0.060), alsa-base (<< 1.0.9b-3)
-Description: ALSA midi latency test
- This package contains a command-line utility for measuring ALSA midi latency.
+Description: Utility for measuring ALSA midi latency
+ Included tools
+  - alsa-midi-latency: utility for measuring ALSA midi latency.
  .
  ALSA is the Advanced Linux Sound Architecture.
