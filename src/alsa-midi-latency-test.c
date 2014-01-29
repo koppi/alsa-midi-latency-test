@@ -302,10 +302,16 @@ int main(int argc, char *argv[])
 		printf("done.\n");
 	}
 
+#if defined(CLOCK_MONOTONIC_RAW)
+#define HR_CLOCK CLOCK_MONOTONIC_RAW
+#else
+#define HR_CLOCK CLOCK_MONOTONIC
+#endif
+
 	struct timespec begin, end;
-	if (clock_gettime(CLOCK_MONOTONIC_RAW, &begin) < 0)
+	if (clock_gettime(HR_CLOCK, &begin) < 0)
 		fatal("monotonic raw clock not supported");
-	if (clock_getres(CLOCK_MONOTONIC_RAW, &begin) < 0)
+	if (clock_getres(HR_CLOCK, &begin) < 0)
 		fatal("monotonic raw clock not supported");
 	printf("> clock resolution: %d.%09ld s\n", (int)begin.tv_sec, begin.tv_nsec);
 	if (begin.tv_sec || begin.tv_nsec > 1000000)
@@ -361,7 +367,7 @@ int main(int argc, char *argv[])
 				break;
 		}
 
-		clock_gettime(CLOCK_MONOTONIC_RAW, &begin);
+		clock_gettime(HR_CLOCK, &begin);
 
 		err = snd_seq_event_output_direct(seq, &ev);
 		check_snd("output MIDI event", err);
@@ -391,7 +397,7 @@ int main(int argc, char *argv[])
 		if (!rec_ev)
 			break;
 
-		clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+		clock_gettime(HR_CLOCK, &end);
 
 		unsigned int delay_ns = timespec_sub(&end, &begin);
 		if (sample_nr < skip_samples) {
