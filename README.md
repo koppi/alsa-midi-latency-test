@@ -187,7 +187,7 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 ## BUGS and AUTHORS
 
-Please report bugs to the authors.
+Please report bugs to the authors. [![Build Status](https://travis-ci.org/koppi/alsa-midi-latency-test.png?branch=master)](https://travis-ci.org/koppi/alsa-midi-latency-test)
 
  * Jakob Flierl <jakob.flierl@gmail.com>
 
