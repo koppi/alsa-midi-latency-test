@@ -1,58 +1,29 @@
-# alsa-midi-latency-test
+# alsa-midi-latency-test [![travis](https://travis-ci.org/koppi/alsa-midi-latency-test.png?branch=master)](https://travis-ci.org/koppi/alsa-midi-latency-test)
 
 alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa subsystem of the linux kernel using a high precision timer. It calculates the worst case roundtrip time of all sent MIDI messages and displays a histogram of the rountrip time jitter:
 
 ![alsa-midi-latency-test](https://raw.github.com/koppi/alsa-midi-latency-test/master/alsa-midi-latency-test.gif "alsa midi latency test")
 
 ## Install from source code
-
-If you prefer installing alsa-midi-latency-test from source code, please run the following commands from you terminal:
-
-
-```bash
-wget -O alsa-midi-latency-test.zip https://github.com/koppi/alsa-midi-latency-test/zipball/master
-unzip alsa-midi-latency-test.zip
-cd alsa-midi-latency-test*
-```
-
-or
-
 ```bash
 git clone https://github.com/koppi/alsa-midi-latency-test.git
 cd alsa-midi-latency-test/
 ```
-
-### Compile / Install
-
 The following packages are required to build alsa-midi-latency-test:
-
 ```bash
 sudo apt-get install debhelper autotools-dev automake libasound2-dev
 ```
-
 Compile alsa-midi-latency-test as follows:
-
 ```bash
 sh autogen.sh
 ./configure
 make
 ```
-
 Install alsa-midi-latency-test as follows:
-
 ```bash
 sudo make install
 ```
-
-or use checkinstall:
-
-```bash
-sudo apt-get install checkinstall
-sudo checkinstall
-```
-
 or build and install an Ubuntu / Debian package:
-
 ```bash
 debuild
 sudo dpkg -i ../alsa-midi-latency-test*.deb
@@ -76,7 +47,7 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
 ### Benchmark Results
 
-Benchmark results for various MIDI adapters can be found in [benchmarks/](alsa-midi-latency-test/blob/master/benchmarks). The setup of the MIDI loop back chains is as follows:
+Benchmark results for various MIDI adapters can be found in [benchmarks/](benchmarks). The setup of the MIDI loop back chains is as follows:
 
  * [PC - USB - Elektron TM-1 OUT - MIDI loop - Elektron TM-1 IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/elektron-tm1.txt)
  * [PC - USB - Polytec GM5 midibox OUT - MIDI loop - Polytec GM5 midibox IN - USB - PC](alsa-midi-latency-test/blob/master/benchmarks/gm5x5x5.txt)
@@ -87,13 +58,17 @@ Benchmark results for various MIDI adapters can be found in [benchmarks/](alsa-m
  * [PC - Edirol UM-2EX - PC](alsa-midi-latency-test/blob/master/benchmarks/um2ex.txt)
  * [PC - Yamaha UX256 (6-Port) - PC](alsa-midi-latency-test/blob/master/benchmarks/yamaha-ux256.txt)
 
-If you have an interesting setup, please send [us](https://github.com/koppi) you results so we can include them here for further reference.
-
 ### User Experiences - Archive
+
+#### 2015
+
+ * More to be written. Please share your results in the [Wiki](wiki/).
 
 #### 2014
 
- * More to be written. Please share your results.
+ * [morsanuto - MIDI Through virtual device loopback test](https://github.com/raboof/alsa-midi-latency-test/wiki/MIDI-Through-virtual-device-loopback-test)
+ * [morsanuto - Precision Measuring Instruments : reference MIDI hardware](https://github.com/raboof/alsa-midi-latency-test/wiki/Precision-Measuring-Instruments-:-reference-MIDI-hardware)
+ * [morsanuto - Wireless MIDI performance : CME WIDI X8](https://github.com/raboof/alsa-midi-latency-test/wiki/Wireless-MIDI-performance-:-CME-WIDI-X8)
 
 #### 2013
 
@@ -174,8 +149,8 @@ If you have an interesting setup, please send [us](https://github.com/koppi) you
 
 ## BUGS and AUTHORS
 
-Please report bugs to the authors. [![Build Status](https://travis-ci.org/koppi/alsa-midi-latency-test.png?branch=master)](https://travis-ci.org/koppi/alsa-midi-latency-test)
+Please report bugs to the authors.
 
  * Jakob Flierl <jakob.flierl@gmail.com>
 
--- November, 2009, last updated January 2014.
+-- November, 2009, last updated July 2015.
