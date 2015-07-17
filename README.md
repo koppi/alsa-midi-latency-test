@@ -4,19 +4,6 @@ alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa
 
 ![alsa-midi-latency-test](https://raw.github.com/koppi/alsa-midi-latency-test/master/alsa-midi-latency-test.gif "alsa midi latency test")
 
-## Install from Ubuntu PPA
-
-Installing alsa-midi-latency-test is easy on Ubuntu. Just run the following commands from your terminal:
-
-
-```bash
-sudo add-apt-repository -y ppa:jakob-flierl/alsa-midi-latency-test
-sudo apt-get update
-sudo apt-get -y install alsa-midi-latency-test
-```
-
-In this way, you will get the latest daily build of alsa-midi-latency-test.
-
 ## Install from source code
 
 If you prefer installing alsa-midi-latency-test from source code, please run the following commands from you terminal:
