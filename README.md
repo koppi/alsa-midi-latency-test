@@ -62,7 +62,7 @@ Benchmark results for various MIDI adapters can be found in [benchmarks/](benchm
 
 #### 2015
 
- * More to be written. Please share your results in the [Wiki](wiki/).
+ * More to be written. Please share your results in the [Wiki](../../wiki/).
 
 #### 2014
 
