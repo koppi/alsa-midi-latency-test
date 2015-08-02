@@ -32,8 +32,6 @@
 
 #include <sys/utsname.h>
 
-#define DEBUG 1
-
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof *(a))
 
 static snd_seq_t *seq;
@@ -137,7 +135,10 @@ static void usage(const char *argv0)
 	       "  -S, --samples=# of samples to take for the measurement (default: 10000)\n"
 	       "  -s, --skip=# of samples    to skip at the beginning (default: 0)\n"
 	       "  -w, --wait=ms              time interval between measurements\n"
-	       "  -r, --random-wait          use random interval between wait and 2*wait\n\n"
+	       "  -r, --random-wait          use random interval between wait and 2*wait\n"
+           "  -x                         disable debug output of measurements,\n"
+           "                             this improves timing accuracy with very low latencies\n"
+           "                             use this with -w to avoid CPU saturation.\n\n"
 	       "  -h, --help                 this help\n"
 	       "  -V, --version              print current version\n"
 	       "\n", argv0);
@@ -183,7 +184,7 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlo:i:RP:s:S:w:r";
+	static char short_options[] = "hVlo:i:RP:s:S:w:rx";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
@@ -204,6 +205,7 @@ int main(int argc, char *argv[])
 	int skip_samples = 0;
 	int nr_samples = 10000;
 	int random_wait = 0;
+    int debug = 1;
 	double wait = 0.0;
 	const char *output_name = NULL;
 	const char *input_name = NULL;
@@ -270,6 +272,9 @@ int main(int argc, char *argv[])
 		case 'r':
 			random_wait = 1;
 			break;
+        case 'x':
+            debug = 0;
+            break;
 		default:
 			usage(argv[0]);
 			return EXIT_FAILURE;
@@ -359,7 +364,7 @@ int main(int argc, char *argv[])
 			printf("> skipping first %d latency samples\n", skip_samples);
 	}
 
-	if (DEBUG)
+	if (debug == 1)
 		printf("\nsample; latency_ms; latency_ms_worst\n");
 
 	snd_seq_event_t ev;
@@ -421,14 +426,14 @@ int main(int argc, char *argv[])
 
 		unsigned int delay_ns = timespec_sub(&end, &begin);
 		if (sample_nr < skip_samples) {
-			//if (DEBUG) printf("skipping sample %d\n", sample_nr);
+			//if (debug == 1) printf("skipping sample %d\n", sample_nr);
 		} else if (delay_ns > max_delay) {
 			max_delay = delay_ns;
-			if (DEBUG)
+			if (debug == 1)
 				printf("%6u; %10.2f; %10.2f     \n",
 				       sample_nr, delay_ns / 1000000.0, max_delay / 1000000.0);
 		} else {
-			if (DEBUG)
+			if (debug == 1)
 				printf("%6u; %10.2f; %10.2f     \r",
 				       sample_nr, delay_ns / 1000000.0, max_delay / 1000000.0);
 		}
