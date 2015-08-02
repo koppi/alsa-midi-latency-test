@@ -1,3 +1,9 @@
+alsa-midi-latency-test (0.0.5-1ubuntu1) unstable; urgency=low
+
+  * Push version 0.0.5-1.
+
+ -- Jakob Flierl <jakob.flierl@gmail.com>  Sun, 02 Aug 2015 19:24:06 +0200
+
 alsa-midi-latency-test (0.0.4-3ubuntu1) unstable; urgency=low
 
   * Push version 0.0.4-3.
