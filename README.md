@@ -47,22 +47,13 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
 ### Benchmark Results
 
-Benchmark results for various MIDI adapters can be found in [benchmarks/](benchmarks). The setup of the MIDI loop back chains is as follows:
-
- * [PC - USB - Elektron TM-1 OUT - MIDI loop - Elektron TM-1 IN - USB - PC](benchmarks/elektron-tm1.txt)
- * [PC - USB - Polytec GM5 midibox OUT - MIDI loop - Polytec GM5 midibox IN - USB - PC](benchmarks/gm5x5x5.txt)
- * [PC - Edirol UA-25EX - PC](benchmarks/um2ex.txt)
- * [PC - M-Audio 2496 - PC](benchmarks/m-audio-2496.txt)
- * [PC - USB - MidiSport 2x2 'Anniversary Edition' port B OUT - MidiSport 2x2 'Anniversary Edition' port B IN - USB - PC](benchmarks/midisport2x2ann.txt)
- * [PC - MPU-401-Port on motherboard - PC](benchmarks/mpu401.txt)
- * [PC - Edirol UM-2EX - PC](benchmarks/um2ex.txt)
- * [PC - Yamaha UX256 (6-Port) - PC](benchmarks/yamaha-ux256.txt)
+Please share your results in the [Wiki](../../wiki/).
 
 ### User Experiences - Archive
 
 #### 2015
  * [Elia - MIDI PCI card with Envy24 chip and M-Audio Audiophile 2496](http://cauldronmidi.org/index.php/forum/perf-tools/7-alsa-midi-latency-test)
- * More to be written. Please share your results in the [Wiki](../../wiki/).
+ * More to be written.
 
 #### 2014
 
