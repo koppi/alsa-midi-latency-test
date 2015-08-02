@@ -137,7 +137,7 @@ Benchmark results for various MIDI adapters can be found in [benchmarks/](benchm
 
     The Advanced Linux Sound Architecture.
 
- * http://earthvegaconnection.com/evc/products/miditest
+ * [http://www.evc-soft.nl/evc/products/miditest/](http://web.archive.org/web/20061128213256/http://www.evc-soft.nl/evc/products/miditest/)
 
     The MidiTest software for Microsoft Windows.
 
