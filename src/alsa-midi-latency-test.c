@@ -138,7 +138,9 @@ static void usage(const char *argv0)
 	       "  -r, --random-wait          use random interval between wait and 2*wait\n"
            "  -x                         disable debug output of measurements,\n"
            "                             this improves timing accuracy with very low latencies\n"
-           "                             use this with -w to avoid CPU saturation.\n\n"
+           "                             use this with -w to avoid CPU saturation.\n"
+           " group bins in histogram:\n"
+           "  -1 -2 -3 -4 -5 -6          0.1ms, 0.01ms, 0.001ms.. 0.000001ms (default: 0.1ms)\n\n"
 	       "  -h, --help                 this help\n"
 	       "  -V, --version              print current version\n"
 	       "\n", argv0);
@@ -184,7 +186,7 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlo:i:RP:s:S:w:rx";
+	static char short_options[] = "hVlo:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
@@ -205,6 +207,8 @@ int main(int argc, char *argv[])
 	int skip_samples = 0;
 	int nr_samples = 10000;
 	int random_wait = 0;
+    int precision = 1;
+    int high_precision_display = 1;
     int debug = 1;
 	double wait = 0.0;
 	const char *output_name = NULL;
@@ -272,6 +276,30 @@ int main(int argc, char *argv[])
 		case 'r':
 			random_wait = 1;
 			break;
+        case '1':
+            precision = 1;
+            high_precision_display = 1;
+            break;
+        case '2':
+            precision = 2;
+            high_precision_display = 10;
+            break;
+        case '3':
+            precision = 3;
+            high_precision_display = 100;
+            break;
+        case '4':
+            precision = 4;
+            high_precision_display = 1000;
+            break;
+        case '5':
+            precision = 5;
+            high_precision_display = 10000;
+            break;
+        case '6':
+            precision = 6;
+            high_precision_display = 100000;
+            break;
         case 'x':
             debug = 0;
             break;
@@ -456,7 +484,7 @@ int main(int argc, char *argv[])
 	for (i = 0; i < ARRAY_SIZE(delay_hist); ++i)
 		delay_hist[i] = 0;
 	for (i = skip_samples; i < sample_nr; ++i) {
-		unsigned int index = (delays[i] + 50000) / 100000;
+		unsigned int index = (delays[i] + 50000/high_precision_display) / (100000/high_precision_display);
 		if (index >= ARRAY_SIZE(delay_hist))
 			index = ARRAY_SIZE(delay_hist) - 1;
 		delay_hist[index]++;
@@ -480,7 +508,7 @@ int main(int argc, char *argv[])
 				puts("...");
 				skipped = 0;
 			}
-			printf("%5.1f -%5.1f ms: %8u ", i/10.0, i/10.0 + 0.09, delay_hist[i]);
+			printf("%*.*f -%*.*f ms: %8u ", 4 + precision, precision, i/(10.0*high_precision_display), 4 + precision, precision, i/(10.0*high_precision_display) + (0.0999999/high_precision_display), delay_hist[i]);
 			unsigned int bar_width = (delay_hist[i] * 50 + max_samples / 2) / max_samples;
 			if (!bar_width && delay_hist[i])
 				bar_width = 1;
