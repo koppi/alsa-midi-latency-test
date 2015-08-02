@@ -126,7 +126,7 @@ Benchmark results for various MIDI adapters can be found in [benchmarks/](benchm
 
 ## See also
 
- * http://www.linuxaudio.org/mailarchive/lat/
+ * http://lists.linuxaudio.org/listinfo/linux-audio-tuning
 
     The linux-audio tuning (LAT) mailing list is to help GNU/Linux distribution
     maintainers  and  other interested users to share information on system
