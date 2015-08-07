@@ -458,12 +458,12 @@ int main(int argc, char *argv[])
 		} else if (delay_ns > max_delay) {
 			max_delay = delay_ns;
 			if (debug == 1)
-				printf("%6u; %10.2f; %10.2f     \n",
-				       sample_nr, delay_ns / 1000000.0, max_delay / 1000000.0);
+				printf("%6u; %10.*f; %10.*f     \n",
+				       sample_nr, 2 + precision, delay_ns / 1000000.0, 2 + precision, max_delay / 1000000.0);
 		} else {
 			if (debug == 1)
-				printf("%6u; %10.2f; %10.2f     \r",
-				       sample_nr, delay_ns / 1000000.0, max_delay / 1000000.0);
+				printf("%6u; %10.*f; %10.*f     \r",
+				       sample_nr, 2 + precision, delay_ns / 1000000.0, 2 + precision, max_delay / 1000000.0);
 		}
 		if (delay_ns < min_delay)
 			min_delay = delay_ns;
@@ -537,8 +537,8 @@ int main(int argc, char *argv[])
 
 	} else {
 		printf("\n> SUCCESS\n");
-		printf("\n best latency was %.2f ms\n", min_delay / 1000000.0);
-		printf(" worst latency was %.2f ms, which is great.\n\n", max_delay/1000000.0);
+		printf("\n best latency was %.*f ms\n", 2 + precision, min_delay / 1000000.0);
+		printf(" worst latency was %.*f ms, which is great.\n\n", 2 + precision, max_delay/1000000.0);
 
 		snd_seq_close(seq);
 		return EXIT_SUCCESS;
