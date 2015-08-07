@@ -508,7 +508,7 @@ int main(int argc, char *argv[])
 				puts("...");
 				skipped = 0;
 			}
-			printf("%*.*f -%*.*f ms: %8u ", 4 + precision, precision, i/(10.0*high_precision_display), 4 + precision, precision, i/(10.0*high_precision_display) + (0.0999999/high_precision_display), delay_hist[i]);
+			printf("%*.*f -%*.*f ms: %8u ", 4 + precision, precision, i/(10.0*high_precision_display), 4 + precision, precision, i/(10.0*high_precision_display) + (0.09999999/high_precision_display), delay_hist[i]);
 			unsigned int bar_width = (delay_hist[i] * 50 + max_samples / 2) / max_samples;
 			if (!bar_width && delay_hist[i])
 				bar_width = 1;
