@@ -479,7 +479,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	unsigned int delay_hist[1000];
+	unsigned int delay_hist[1000000];
 	unsigned int i, j;
 	for (i = 0; i < ARRAY_SIZE(delay_hist); ++i)
 		delay_hist[i] = 0;
@@ -537,8 +537,8 @@ int main(int argc, char *argv[])
 
 	} else {
 		printf("\n> SUCCESS\n");
-		printf("\n best latency was %.*f ms\n", 2 + precision, min_delay / 1000000.0);
-		printf(" worst latency was %.*f ms, which is great.\n\n", 2 + precision, max_delay/1000000.0);
+		printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
+		printf(" worst latency was %.*f ms, which is great.\n\n", precision, max_delay/1000000.0);
 
 		snd_seq_close(seq);
 		return EXIT_SUCCESS;
