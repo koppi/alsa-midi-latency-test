@@ -134,9 +134,8 @@ Please share your results in the [Wiki](../../wiki/).
 
 ## Thanks
 
- * to Arnout Engelen for initial testing and giving feedback.
- * to Clemens Ladisch for a number of fixes with the high precision timer and
-   alsa midi event handling.
+ * to [Arnout Engelen](https://github.com/raboof) for initial testing and giving feedback.
+ * to [Clemens Ladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and alsa midi event handling.
 
 ## BUGS and AUTHORS
 
