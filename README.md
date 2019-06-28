@@ -11,7 +11,7 @@ cd alsa-midi-latency-test/
 ```
 The following packages are required to build alsa-midi-latency-test:
 ```bash
-sudo apt-get install debhelper autotools-dev automake libasound2-dev
+sudo apt -y install debhelper autotools-dev automake libasound2-dev
 ```
 Compile alsa-midi-latency-test as follows:
 ```bash
