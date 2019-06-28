@@ -25,7 +25,8 @@ sudo make install
 ```
 or build and install an Ubuntu / Debian package:
 ```bash
-debuild
+sudo apt -y install devscripts
+debuild -uc -us
 sudo dpkg -i ../alsa-midi-latency-test*.deb
 ```
 
