@@ -73,6 +73,10 @@ Please share your results in the [Wiki](../../wiki/).
 
     The MidiTest software for Microsoft Windows.
 
+ * https://github.com/raboof/realtimeconfigquickscan
+
+    Linux configuration checker for systems to be used for real-time audio.
+
 ## Thanks
 
  * to [Arnout Engelen](https://github.com/raboof) for initial testing and giving feedback.
