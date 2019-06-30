@@ -28,7 +28,7 @@ or build and install an Ubuntu / Debian package:
 sudo apt -y install devscripts
 debuild -uc -us
 sudo dpkg -i ../alsa-midi-latency-test*.deb
-sudo apt -f install
+sudo apt -f install # for linux-sound-base package
 ```
 
 ## Run alsa-midi-latency-test
