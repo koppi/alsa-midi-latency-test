@@ -1,7 +1,7 @@
 /*
  * alsa-midi-latency-test.c - measure the roundtrip time of MIDI messages
  *
- * Copyright (c) 2009 - 2015 Jakob Flierl <jakob.flierl@gmail.com>
+ * Copyright (c) 2009 - 2019 Jakob Flierl <jakob.flierl@gmail.com>
  *
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -520,6 +520,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	snd_seq_close(seq);
+
 	if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
 		printf("\n> FAIL\n");
 		printf("\n best latency was %.2f ms\n", min_delay / 1000000.0);
@@ -532,7 +534,6 @@ int main(int argc, char *argv[])
 		printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
 		printf(" to find out, howto fix issues with high midi latencies.\n\n");
 
-		snd_seq_close(seq);
 		return EXIT_FAILURE;
 
 	} else {
@@ -540,7 +541,6 @@ int main(int argc, char *argv[])
 		printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
 		printf(" worst latency was %.*f ms, which is great.\n\n", precision, max_delay/1000000.0);
 
-		snd_seq_close(seq);
 		return EXIT_SUCCESS;
 	}
 }
