@@ -40,7 +40,9 @@ m4/Makefile
 m4/Makefile.in
 src/Makefile.in
 build-stamp
+compile
 config.guess
+config.rpath
 config.status
 config.sub
 configure
