@@ -33,8 +33,13 @@
 #include <sys/utsname.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof *(a))
+#define ENABLE_RAW
 
 static snd_seq_t *seq;
+#ifdef ENABLE_RAW
+static snd_rawmidi_t *raw_in;
+static snd_rawmidi_t *raw_out;
+#endif // ENABLE_RAW
 static volatile sig_atomic_t signal_received = 0;
 
 void print_uname()
@@ -85,8 +90,215 @@ static int set_realtime_priority(int policy, int prio)
 	return 0;
 }
 
+#ifdef ENABLE_RAW
+static void quiet_error_handler(const char *file, int line, const char *function, int err, const char *fmt, ...)
+{
+	return;
+}
+// code below borrowed rom:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
+// https://ccrma.stanford.edu/~craig/articles/linuxmidi/alsa-1.0/alsarawportlist.c
+//
+//////////////////////////////
+//
+// print_midi_ports -- go through the list of available "soundcards",
+//   checking them to see if there are devices/subdevices on them which
+//   can read/write MIDI data.
+//
+static void list_midi_devices_on_card(int card);
+static void list_subdevice_info(snd_ctl_t *ctl, int card, int device);
+
+//////////////////////////////
+//
+// is_input -- returns true if specified card/device/sub can output MIDI data.
+//
+
+static int is_input(snd_ctl_t *ctl, int card, int device, int sub) {
+   snd_rawmidi_info_t *info;
+   int status;
+
+   snd_rawmidi_info_alloca(&info);
+   snd_rawmidi_info_set_device(info, device);
+   snd_rawmidi_info_set_subdevice(info, sub);
+   snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_INPUT);
+
+   if ((status = snd_ctl_rawmidi_info(ctl, info)) < 0 && status != -ENXIO) {
+      return status;
+   } else if (status == 0) {
+      return 1;
+   }
+
+   return 0;
+}
+
+//////////////////////////////
+//
+// is_output -- returns true if specified card/device/sub can output MIDI data.
+//
+
+static int is_output(snd_ctl_t *ctl, int card, int device, int sub) {
+   snd_rawmidi_info_t *info;
+   int status;
+
+   snd_rawmidi_info_alloca(&info);
+   snd_rawmidi_info_set_device(info, device);
+   snd_rawmidi_info_set_subdevice(info, sub);
+   snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_OUTPUT);
+
+   if ((status = snd_ctl_rawmidi_info(ctl, info)) < 0 && status != -ENXIO) {
+      return status;
+   } else if (status == 0) {
+      return 1;
+   }
+
+   return 0;
+}
+
+//////////////////////////////
+//
+// list_midi_devices_on_card -- For a particular "card" look at all
+//   of the "devices/subdevices" on it and print information about it
+//   if it can handle MIDI input and/or output.
+//
+
+static void list_midi_devices_on_card(int card) {
+   snd_ctl_t *ctl;
+   char name[32];
+   int device = -1;
+   int status;
+   sprintf(name, "hw:%d", card);
+   if ((status = snd_ctl_open(&ctl, name, 0)) < 0) {
+      fatal("cannot open control for card %d: %s", card, snd_strerror(status));
+   }
+   do {
+      status = snd_ctl_rawmidi_next_device(ctl, &device);
+      if (status < 0) {
+         fatal("cannot determine device number: %s", snd_strerror(status));
+      }
+      if (device >= 0) {
+         list_subdevice_info(ctl, card, device);
+      }
+   } while (device >= 0);
+   snd_ctl_close(ctl);
+}
+
+//////////////////////////////
+//
+// list_subdevice_info -- Print information about a subdevice
+//   of a device of a card if it can handle MIDI input and/or output.
+//
+
+static void list_subdevice_info(snd_ctl_t *ctl, int card, int device) {
+   snd_rawmidi_info_t *info;
+   const char *name;
+   const char *sub_name;
+   int subs, subs_in, subs_out;
+   int sub, in, out;
+   int status;
+
+   snd_rawmidi_info_alloca(&info);
+   snd_rawmidi_info_set_device(info, device);
+
+   snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_INPUT);
+   snd_ctl_rawmidi_info(ctl, info);
+   subs_in = snd_rawmidi_info_get_subdevices_count(info);
+   snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_OUTPUT);
+   snd_ctl_rawmidi_info(ctl, info);
+   subs_out = snd_rawmidi_info_get_subdevices_count(info);
+   subs = subs_in > subs_out ? subs_in : subs_out;
+
+   sub = 0;
+   in = out = 0;
+   if ((status = is_output(ctl, card, device, sub)) < 0) {
+      fatal("cannot get rawmidi information %d:%d: %s",
+            card, device, snd_strerror(status));
+   } else if (status)
+      out = 1;
+
+   if (status == 0) {
+      if ((status = is_input(ctl, card, device, sub)) < 0) {
+         fatal("cannot get rawmidi information %d:%d: %s",
+               card, device, snd_strerror(status));
+      }
+   } else if (status)
+      in = 1;
+
+   if (status == 0)
+      return;
+
+   name = snd_rawmidi_info_get_name(info);
+   sub_name = snd_rawmidi_info_get_subdevice_name(info);
+   if (sub_name[0] == '\0') {
+      if (subs == 1) {
+         printf("%c%c  hw:%d,%d    %s\n",
+                in  ? 'I' : ' ',
+                out ? 'O' : ' ',
+                card, device, name);
+      } else
+         printf("%c%c  hw:%d,%d    %s (%d subdevices)\n",
+                in  ? 'I' : ' ',
+                out ? 'O' : ' ',
+                card, device, name, subs);
+   } else {
+      sub = 0;
+      for (;;) {
+         printf("%c%c  hw:%d,%d,%d  %s\n",
+                in ? 'I' : ' ', out ? 'O' : ' ',
+                card, device, sub, sub_name);
+         if (++sub >= subs)
+            break;
+
+         in = is_input(ctl, card, device, sub);
+         out = is_output(ctl, card, device, sub);
+         snd_rawmidi_info_set_subdevice(info, sub);
+         if (out) {
+            snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_OUTPUT);
+            if ((status = snd_ctl_rawmidi_info(ctl, info)) < 0) {
+               fatal("cannot get rawmidi information %d:%d:%d: %s",
+                     card, device, sub, snd_strerror(status));
+            }
+         } else {
+            snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_INPUT);
+            if ((status = snd_ctl_rawmidi_info(ctl, info)) < 0) {
+               fatal("cannot get rawmidi information %d:%d:%d: %s",
+                     card, device, sub, snd_strerror(status));
+            }
+         }
+         sub_name = snd_rawmidi_info_get_subdevice_name(info);
+      }
+   }
+}
+
+static void list_ports_raw(void)
+{
+	int status;
+	int card = -1;  // use -1 to prime the pump of iterating through card list
+	char* longname  = NULL;
+	char* shortname = NULL;
+	puts("Rawmidi ports:");
+
+	int found = 0;
+	while (1) {
+		if ((status = snd_card_next(&card)) < 0) {
+			fatal("cannot determine card number: %s", snd_strerror(status));
+		}
+		if (card < 0)
+			break;
+		list_midi_devices_on_card(card);
+	}
+}
+#endif // ENABLE_RAW
+
 static void list_ports(void)
 {
+#ifdef ENABLE_RAW
+	list_ports_raw();
+	if (seq)
+		puts("Sequencer ports:");
+	else {
+		fprintf(stderr, "ALSA sequencer disabled (load module and/or rebuild kernel to enable)\n");
+		return;
+	}
+#endif // ENABLE_RAW
 	snd_seq_client_info_t *cinfo;
 	snd_seq_port_info_t *pinfo;
 
@@ -129,6 +341,9 @@ static void usage(const char *argv0)
 	       "  -o, --output=client:port   port to send events to\n"
 	       "  -i, --input=client:port    port to receive events from\n"
 	       "  -l, --list                 list available midi input/output ports\n\n"
+#ifdef ENABLE_RAW
+	       "  -a, --raw                  interpret ports as snd_rawmidi names\n\n"
+#endif // ENABLE_RAW
 	       "  -R, --realtime             use realtime scheduling (default: no)\n"
 	       "  -P, --priority=int         scheduling priority, use with -R\n"
 	       "                             (default: maximum)\n\n"
@@ -186,11 +401,12 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlo:i:RP:s:S:w:r123456x";
+	static char short_options[] = "hVlao:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
 		{"list", 0, NULL, 'l'},
+		{"raw", 0, NULL, 'a'},
 		{"output", 1, NULL, 'o'},
 		{"input", 1, NULL, 'i'},
 		{"realtime", 0, NULL, 'R'},
@@ -216,10 +432,18 @@ int main(int argc, char *argv[])
 	snd_seq_addr_t output_addr;
 	snd_seq_addr_t input_addr;
 	int c, err;
+#ifdef ENABLE_RAW
+	int use_rawmidi = 0;
+#endif // ENABLE_RAW
 
 	while ((c = getopt_long(argc, argv, short_options,
 				long_options, NULL)) != -1) {
 		switch (c) {
+#ifdef ENABLE_RAW
+		case 'a':
+			use_rawmidi = 1;
+			break;
+#endif // ENABLE_RAW
 		case 'h':
 			usage(argv[0]);
 			return EXIT_SUCCESS;
@@ -313,8 +537,21 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	int use_seq = 1;
+#ifdef ENABLE_RAW
+	// temporarily change the ALSA error handler to silence warning in case
+	// /dev/snd/seq doesn't exist (e.g.: lacks kernel support or module not
+	// loaded)
+	snd_lib_error_set_handler(quiet_error_handler);
+#endif // ENABLE_RAW
 	err = snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0);
+#ifdef ENABLE_RAW
+	snd_lib_error_set_handler(NULL); // restore default handler
+	if (err)
+		use_seq = 0;
+#else // ENABLE_RAW
 	check_snd("open sequencer", err);
+#endif // ENABLE_RAW
 
 	if (do_list) {
 		list_ports();
@@ -325,23 +562,40 @@ int main(int argc, char *argv[])
 		fatal("Please specify an output port with --output.  Use -l to get a list.");
 	if (!input_name)
 		fatal("Please specify an input port with --input.  Use -l to get a list.");
-	err = snd_seq_parse_address(seq, &output_addr, output_name);
-	check_snd("parse output port", err);
-	err = snd_seq_parse_address(seq, &input_addr, input_name);
-	check_snd("parse input port", err);
+#ifdef ENABLE_RAW
+	// ensure that exactly one of rawmidi or seq is enabled
+	if (use_rawmidi)
+		use_seq = 0;
+	else
+		use_rawmidi = !use_seq;
+	if (use_rawmidi) {
+		err = snd_rawmidi_open(&raw_in, NULL, input_name, SND_RAWMIDI_NONBLOCK);
+		check_snd("open input", err);
+		err = snd_rawmidi_open(NULL, &raw_out, output_name, SND_RAWMIDI_SYNC);
+		check_snd("open output", err);
+	}
+#endif // ENABLE_RAW
+	int port;
+	int client;
+	if (use_seq) {
+		err = snd_seq_parse_address(seq, &output_addr, output_name);
+		check_snd("parse output port", err);
+		err = snd_seq_parse_address(seq, &input_addr, input_name);
+		check_snd("parse input port", err);
 
-	err = snd_seq_set_client_name(seq, "alsa-midi-latency-test");
-	check_snd("set client name", err);
-	int client = snd_seq_client_id(seq);
-	check_snd("get client id", client);
-	int port = snd_seq_create_simple_port(seq, "alsa-midi-latency-test",
-					      SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SYNC_WRITE,
-					      SND_SEQ_PORT_TYPE_APPLICATION);
-	check_snd("create port", port);
-	err = snd_seq_connect_to(seq, port, output_addr.client, output_addr.port);
-	check_snd("connect output port", err);
-	err = snd_seq_connect_from(seq, port, input_addr.client, input_addr.port);
-	check_snd("connect input port", err);
+		err = snd_seq_set_client_name(seq, "alsa-midi-latency-test");
+		check_snd("set client name", err);
+		client = snd_seq_client_id(seq);
+		check_snd("get client id", client);
+		port = snd_seq_create_simple_port(seq, "alsa-midi-latency-test",
+						      SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SYNC_WRITE,
+						      SND_SEQ_PORT_TYPE_APPLICATION);
+		check_snd("create port", port);
+		err = snd_seq_connect_to(seq, port, output_addr.client, output_addr.port);
+		check_snd("connect output port", err);
+		err = snd_seq_connect_from(seq, port, input_addr.client, input_addr.port);
+		check_snd("connect input port", err);
+	}
 
         print_version();
 	print_uname();
@@ -396,15 +650,40 @@ int main(int argc, char *argv[])
 		printf("\nsample; latency_ms; latency_ms_worst\n");
 
 	snd_seq_event_t ev;
-	snd_seq_ev_clear(&ev);
-	snd_seq_ev_set_dest(&ev, output_addr.client, output_addr.port);
-	snd_seq_ev_set_source(&ev, port);
-	snd_seq_ev_set_direct(&ev);
-	snd_seq_ev_set_noteon(&ev, 0, 60, 127);
+	int pollfds_count;
+	struct pollfd *pollfds;
+	if (use_seq)
+	{
+		snd_seq_ev_clear(&ev);
+		snd_seq_ev_set_dest(&ev, output_addr.client, output_addr.port);
+		snd_seq_ev_set_source(&ev, port);
+		snd_seq_ev_set_direct(&ev);
+		snd_seq_ev_set_noteon(&ev, 0, 60, 127);
 
-	int pollfds_count = snd_seq_poll_descriptors_count(seq, POLLIN);
-	struct pollfd *pollfds = alloca(pollfds_count * sizeof *pollfds);
-	err = snd_seq_poll_descriptors(seq, pollfds, pollfds_count, POLLIN);
+		pollfds_count = snd_seq_poll_descriptors_count(seq, POLLIN);
+		pollfds = alloca(pollfds_count * sizeof *pollfds);
+		err = snd_seq_poll_descriptors(seq, pollfds, pollfds_count, POLLIN);
+	}
+#ifdef ENABLE_RAW
+	const char test_status_byte = 0x90;
+	char msg[3] = { test_status_byte, 60, 127 };
+	if (use_rawmidi)
+	{
+		pollfds_count = snd_rawmidi_poll_descriptors_count(raw_in);
+		pollfds = alloca(pollfds_count * sizeof *pollfds);
+		err = snd_rawmidi_poll_descriptors(raw_in, pollfds, pollfds_count);
+		snd_rawmidi_drain(raw_in);
+		snd_rawmidi_drain(raw_out);
+		// not sure if this is documented anwhere, but in practical
+		// applications we find that one needs to poll() at least once
+		// before incoming messages start being queued.
+		// skipping this dummy poll() here would result in the first
+		// response message not being received if the roundtrip is so
+		// fast that the first call to poll() happens after the
+		// device has sent back its response
+		poll(pollfds, pollfds_count, 0);
+	}
+#endif // ENABLE_RAW
 	check_snd("get poll descriptors", err);
 	pollfds_count = err;
 
@@ -422,13 +701,24 @@ int main(int argc, char *argv[])
 
 		clock_gettime(HR_CLOCK, &begin);
 
-		err = snd_seq_event_output_direct(seq, &ev);
+		if (use_seq)
+			err = snd_seq_event_output_direct(seq, &ev);
+#ifdef ENABLE_RAW
+		char rec_msg[3];
+		if (use_rawmidi)
+			err = snd_rawmidi_write(raw_out, msg, sizeof(msg));
+#endif // ENABLE_RAW
 		check_snd("output MIDI event", err);
 
 		snd_seq_event_t *rec_ev;
 		int received_something = 0;
 		for (;;) {
-			rec_ev = NULL;
+			if (use_seq)
+				rec_ev = NULL;
+#ifdef ENABLE_RAW
+			if (use_rawmidi)
+				memset(rec_msg, 0, sizeof(rec_msg));
+#endif // ENABLE_RAW
 			err = poll(pollfds, pollfds_count, 1000);
 			if (signal_received)
 			       break;
@@ -437,17 +727,33 @@ int main(int argc, char *argv[])
 			if (err < 0)
 				fatal("poll error: %s", strerror(errno));
 			unsigned short revents;
-			err = snd_seq_poll_descriptors_revents(seq, pollfds, pollfds_count, &revents);
+			if (use_seq)
+				err = snd_seq_poll_descriptors_revents(seq, pollfds, pollfds_count, &revents);
+#ifdef ENABLE_RAW
+			if (use_rawmidi)
+				err = snd_rawmidi_poll_descriptors_revents(raw_in, pollfds, pollfds_count, &revents);
+#endif // ENABLE_RAW
 			check_snd("get poll events", err);
 			if (revents & (POLLERR | POLLNVAL))
 				break;
 			if (!(revents & POLLIN))
 				continue;
-			err = snd_seq_event_input(seq, &rec_ev);
-			check_snd("input MIDI event", err);
-			received_something = 1;
-			if (rec_ev->type == SND_SEQ_EVENT_NOTEON)
-				break;
+			if (use_seq) {
+				err = snd_seq_event_input(seq, &rec_ev);
+				check_snd("input MIDI event", err);
+				received_something = 1;
+				if (rec_ev->type == SND_SEQ_EVENT_NOTEON)
+					break;
+			}
+#ifdef ENABLE_RAW
+			if (use_rawmidi) {
+				err = snd_rawmidi_read(raw_in, rec_msg, sizeof(rec_msg));
+				check_snd("input MIDI event", err);
+				received_something = 1;
+				if (test_status_byte == rec_msg[0])
+					break;
+			}
+#endif // ENABLE_RAW
 		}
 		if (!received_something)
 			break;
@@ -522,7 +828,14 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	snd_seq_close(seq);
+	if (use_seq)
+		snd_seq_close(seq);
+#ifdef ENABLE_RAW
+	if (use_rawmidi) {
+		snd_rawmidi_close(raw_in);
+		snd_rawmidi_close(raw_out);
+	}
+#endif // ENABLE_RAW
 
 	if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
 		printf("\n> FAIL\n");
