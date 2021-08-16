@@ -344,6 +344,9 @@ static void usage(const char *argv0)
 #ifdef ENABLE_RAW
 	       "  -a, --raw                  interpret ports as snd_rawmidi names\n\n"
 #endif // ENABLE_RAW
+	       "  -t, --terse                only send to stdout the test specs and test results:\n"
+	       "                             '<#samples>, <rt>, <priority>, <skip>, <wait_ms>\n"
+	       "                              <random>, <min_latency_ms>, <mean_latency_ms>, <max_latency_ms>'\n"
 	       "  -R, --realtime             use realtime scheduling (default: no)\n"
 	       "  -P, --priority=int         scheduling priority, use with -R\n"
 	       "                             (default: maximum)\n\n"
@@ -401,12 +404,13 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlao:i:RP:s:S:w:r123456x";
+	static char short_options[] = "hVlato:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
 		{"list", 0, NULL, 'l'},
 		{"raw", 0, NULL, 'a'},
+		{"terse", 0, NULL, 't'},
 		{"output", 1, NULL, 'o'},
 		{"input", 1, NULL, 'i'},
 		{"realtime", 0, NULL, 'R'},
@@ -435,6 +439,7 @@ int main(int argc, char *argv[])
 #ifdef ENABLE_RAW
 	int use_rawmidi = 0;
 #endif // ENABLE_RAW
+	int verbose = 1;
 
 	while ((c = getopt_long(argc, argv, short_options,
 				long_options, NULL)) != -1) {
@@ -489,6 +494,10 @@ int main(int argc, char *argv[])
 				printf("Setting nr of samples to take to 1.\n");
 				nr_samples = 1;
 			}
+			break;
+		case 't':
+			verbose = 0;
+			debug = 0;
 			break;
 		case 'w':
 			wait = atof(optarg);
@@ -597,16 +606,20 @@ int main(int argc, char *argv[])
 		check_snd("connect input port", err);
 	}
 
-        print_version();
-	print_uname();
+	if (verbose) {
+		print_version();
+		print_uname();
+	}
 
 	if (random_wait)
 		srand(getRandomNumber());
 
 	if (do_realtime) {
-		printf("> set_realtime_priority(SCHED_FIFO, %d).. ", rt_prio);
+		if(verbose)
+			printf("> set_realtime_priority(SCHED_FIFO, %d).. ", rt_prio);
 		set_realtime_priority(SCHED_FIFO, rt_prio);
-		printf("done.\n");
+		if (verbose)
+			printf("done.\n");
 	}
 
 #if defined(CLOCK_MONOTONIC_RAW)
@@ -620,18 +633,21 @@ int main(int argc, char *argv[])
 		fatal("monotonic raw clock not supported");
 	if (clock_getres(HR_CLOCK, &begin) < 0)
 		fatal("monotonic raw clock not supported");
-	printf("> clock resolution: %d.%09ld s\n", (int)begin.tv_sec, begin.tv_nsec);
-	if (begin.tv_sec || begin.tv_nsec > 1000000)
+	if (verbose)
+		printf("> clock resolution: %d.%09ld s\n", (int)begin.tv_sec, begin.tv_nsec);
+	if ((begin.tv_sec || begin.tv_nsec > 1000000) && verbose)
 		puts("WARNING: You do not have a high-resolution clock!");
-	if (wait) {
+	if (wait && verbose) {
 		if (random_wait)
 			printf("> interval between measurements: %.3f .. %.3f ms\n", wait, wait * 2);
 		else
 			printf("> interval between measurements: %.3f ms\n", wait);
 	}
 
-	printf("\n> sampling %d midi latency values - please wait ...\n", nr_samples);
-	printf("> press Ctrl+C to abort test\n");
+	if (verbose) {
+		printf("\n> sampling %d midi latency values - please wait ...\n", nr_samples);
+		printf("> press Ctrl+C to abort test\n");
+	}
 
 	signal(SIGINT,  sighandler);
 	signal(SIGTERM, sighandler);
@@ -641,9 +657,11 @@ int main(int argc, char *argv[])
 
 	if (skip_samples) {
 		if (skip_samples == 1)
-			printf("> skipping first latency sample\n");
+			if(verbose)
+				printf("> skipping first latency sample\n");
 		else
-			printf("> skipping first %d latency samples\n", skip_samples);
+			if(verbose)
+				printf("> skipping first %d latency samples\n", skip_samples);
 	}
 
 	if (debug == 1)
@@ -689,6 +707,7 @@ int main(int argc, char *argv[])
 
 	unsigned int sample_nr = 0;
 	unsigned int min_delay = UINT_MAX, max_delay = 0;
+	long unsigned int total_delay = 0;
 	for (c = 0; c < nr_samples; ++c) {
 		if (wait) {
 			if (random_wait)
@@ -776,11 +795,14 @@ int main(int argc, char *argv[])
 		if (delay_ns < min_delay)
 			min_delay = delay_ns;
 		delays[sample_nr++] = delay_ns;
+		total_delay += delay_ns;
 
 		ev.data.note.channel ^= 1; // prevent running status
 	}
+	unsigned int mean_delay = total_delay / nr_samples;
 
-	printf("\n> done.\n\n> latency distribution:\n");
+	if (verbose)
+		printf("\n> done.\n\n> latency distribution:\n");
 
 	if (!max_delay) {
 		puts("no delay was measured; clock has too low resolution");
@@ -810,21 +832,23 @@ int main(int argc, char *argv[])
 
 	// plot ascii bars
 	int skipped = 0;
-	for (i = 0; i < ARRAY_SIZE(delay_hist); ++i) {
-		if (delay_hist[i] > 0) {
-			if (skipped) {
-				puts("...");
-				skipped = 0;
+	if (verbose) {
+		for (i = 0; i < ARRAY_SIZE(delay_hist); ++i) {
+			if (delay_hist[i] > 0) {
+				if (skipped) {
+					puts("...");
+					skipped = 0;
+				}
+				printf("%*.*f -%*.*f ms: %8u ", 4 + precision, precision, i/(10.0*high_precision_display), 4 + precision, precision, i/(10.0*high_precision_display) + (0.09999999/high_precision_display), delay_hist[i]);
+				unsigned int bar_width = (delay_hist[i] * 50 + max_samples / 2) / max_samples;
+				if (!bar_width && delay_hist[i])
+					bar_width = 1;
+				for (j = 0; j < bar_width; ++j)
+					printf("#");
+				puts("");
+			} else {
+				skipped = 1;
 			}
-			printf("%*.*f -%*.*f ms: %8u ", 4 + precision, precision, i/(10.0*high_precision_display), 4 + precision, precision, i/(10.0*high_precision_display) + (0.09999999/high_precision_display), delay_hist[i]);
-			unsigned int bar_width = (delay_hist[i] * 50 + max_samples / 2) / max_samples;
-			if (!bar_width && delay_hist[i])
-				bar_width = 1;
-			for (j = 0; j < bar_width; ++j)
-				printf("#");
-			puts("");
-		} else {
-			skipped = 1;
 		}
 	}
 
@@ -837,24 +861,41 @@ int main(int argc, char *argv[])
 	}
 #endif // ENABLE_RAW
 
-	if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
-		printf("\n> FAIL\n");
-		printf("\n best latency was %.2f ms\n", min_delay / 1000000.0);
-		printf(" worst latency was %.2f ms, which is too much. Please check:\n\n", max_delay/1000000.0);
-		printf("  - if your hardware uses shared IRQs - `watch -n 1 cat /proc/interrupts`\n");
-		printf("    while running this test to see, which IRQs the OS is using for your midi hardware,\n\n");
-		printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
-		printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
-		printf(" Have a look at\n");
-		printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
-		printf(" to find out, howto fix issues with high midi latencies.\n\n");
+	if (verbose) {
+		if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
+			printf("\n> FAIL\n");
+			printf("\n best latency was %.2f ms\n", min_delay / 1000000.0);
+			printf(" worst latency was %.2f ms, which is too much. Please check:\n\n", max_delay/1000000.0);
+			printf("  - if your hardware uses shared IRQs - `watch -n 1 cat /proc/interrupts`\n");
+			printf("    while running this test to see, which IRQs the OS is using for your midi hardware,\n\n");
+			printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
+			printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
+			printf(" Have a look at\n");
+			printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
+			printf(" to find out, howto fix issues with high midi latencies.\n\n");
 
-		return EXIT_FAILURE;
+			return EXIT_FAILURE;
 
+		} else {
+			printf("\n> SUCCESS\n");
+			printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
+			printf(" mean latency was %.*f ms\n", precision, mean_delay /1000000.0);
+			printf(" worst latency was %.*f ms, which is great.\n\n", precision, max_delay/1000000.0);
+
+			return EXIT_SUCCESS;
+		}
 	} else {
-		printf("\n> SUCCESS\n");
-		printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
-		printf(" worst latency was %.*f ms, which is great.\n\n", precision, max_delay/1000000.0);
+		printf("%6d, %1d, %3d, %3d, %.3f, %1d, %.3f, %.3f, %.3f\n",
+			nr_samples,
+			do_realtime,
+			rt_prio,
+			skip_samples,
+			wait,
+			random_wait,
+			min_delay / 1000000.0,
+			mean_delay / 1000000.0,
+			max_delay / 1000000.0
+		);
 
 		return EXIT_SUCCESS;
 	}
