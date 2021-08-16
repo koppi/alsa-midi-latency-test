@@ -426,6 +426,7 @@ int main(int argc, char *argv[])
 		check_snd("output MIDI event", err);
 
 		snd_seq_event_t *rec_ev;
+		int received_something = 0;
 		for (;;) {
 			rec_ev = NULL;
 			err = poll(pollfds, pollfds_count, 1000);
@@ -444,10 +445,11 @@ int main(int argc, char *argv[])
 				continue;
 			err = snd_seq_event_input(seq, &rec_ev);
 			check_snd("input MIDI event", err);
+			received_something = 1;
 			if (rec_ev->type == SND_SEQ_EVENT_NOTEON)
 				break;
 		}
-		if (!rec_ev)
+		if (!received_something)
 			break;
 
 		clock_gettime(HR_CLOCK, &end);
