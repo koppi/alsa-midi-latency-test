@@ -344,6 +344,7 @@ static void usage(const char *argv0)
 #ifdef ENABLE_RAW
 	       "  -a, --raw                  interpret ports as snd_rawmidi names\n\n"
 #endif // ENABLE_RAW
+	       "  -T, --timeout=# of ms      how long to wait before considering a message lost (default is 1000)\n"
 	       "  -t, --terse                only send to stdout the test specs and test results:\n"
 	       "                             '<#samples>, <rt>, <priority>, <skip>, <wait_ms>\n"
 	       "                              <random>, <min_latency_ms>, <mean_latency_ms>, <max_latency_ms>'\n"
@@ -404,12 +405,13 @@ static void sighandler(int sig)
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlato:i:RP:s:S:w:r123456x";
+	static char short_options[] = "hVlaT:to:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
 		{"list", 0, NULL, 'l'},
 		{"raw", 0, NULL, 'a'},
+		{"timeout", 1, NULL, 'T'},
 		{"terse", 0, NULL, 't'},
 		{"output", 1, NULL, 'o'},
 		{"input", 1, NULL, 'i'},
@@ -439,6 +441,7 @@ int main(int argc, char *argv[])
 #ifdef ENABLE_RAW
 	int use_rawmidi = 0;
 #endif // ENABLE_RAW
+	unsigned int timeout = 1000;
 	int verbose = 1;
 
 	while ((c = getopt_long(argc, argv, short_options,
@@ -494,6 +497,9 @@ int main(int argc, char *argv[])
 				printf("Setting nr of samples to take to 1.\n");
 				nr_samples = 1;
 			}
+			break;
+		case 'T':
+			timeout = atoi(optarg);
 			break;
 		case 't':
 			verbose = 0;
@@ -738,7 +744,7 @@ int main(int argc, char *argv[])
 			if (use_rawmidi)
 				memset(rec_msg, 0, sizeof(rec_msg));
 #endif // ENABLE_RAW
-			err = poll(pollfds, pollfds_count, 1000);
+			err = poll(pollfds, pollfds_count, timeout);
 			if (signal_received)
 			       break;
 			if (err == 0)
