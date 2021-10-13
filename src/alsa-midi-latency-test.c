@@ -33,13 +33,10 @@
 #include <sys/utsname.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof *(a))
-#define ENABLE_RAW
 
 static snd_seq_t *seq;
-#ifdef ENABLE_RAW
 static snd_rawmidi_t *raw_in;
 static snd_rawmidi_t *raw_out;
-#endif // ENABLE_RAW
 static volatile sig_atomic_t signal_received = 0;
 
 void print_uname()
@@ -90,7 +87,6 @@ static int set_realtime_priority(int policy, int prio)
 	return 0;
 }
 
-#ifdef ENABLE_RAW
 static void quiet_error_handler(const char *file, int line, const char *function, int err, const char *fmt, ...)
 {
 	return;
@@ -286,11 +282,9 @@ static void list_ports_raw(void)
 		list_midi_devices_on_card(card);
 	}
 }
-#endif // ENABLE_RAW
 
 static void list_ports(void)
 {
-#ifdef ENABLE_RAW
 	list_ports_raw();
 	if (seq)
 		puts("Sequencer ports:");
@@ -298,7 +292,6 @@ static void list_ports(void)
 		fprintf(stderr, "ALSA sequencer disabled (load module and/or rebuild kernel to enable)\n");
 		return;
 	}
-#endif // ENABLE_RAW
 	snd_seq_client_info_t *cinfo;
 	snd_seq_port_info_t *pinfo;
 
@@ -341,9 +334,7 @@ static void usage(const char *argv0)
 	       "  -o, --output=client:port   port to send events to\n"
 	       "  -i, --input=client:port    port to receive events from\n"
 	       "  -l, --list                 list available midi input/output ports\n\n"
-#ifdef ENABLE_RAW
-	       "  -a, --raw                  interpret ports as snd_rawmidi names\n\n"
-#endif // ENABLE_RAW
+	       "  -a, --raw                  interpret ports as snd_rawmidi names\n"
 	       "  -T, --timeout=# of ms      how long to wait before considering a message lost (default is 1000)\n"
 	       "  -t, --terse                only send to stdout the test specs and test results:\n"
 	       "                             '<#samples>, <rt>, <priority>, <skip>, <wait_ms>\n"
@@ -438,20 +429,16 @@ int main(int argc, char *argv[])
 	snd_seq_addr_t output_addr;
 	snd_seq_addr_t input_addr;
 	int c, err;
-#ifdef ENABLE_RAW
 	int use_rawmidi = 0;
-#endif // ENABLE_RAW
 	unsigned int timeout = 1000;
 	int verbose = 1;
 
 	while ((c = getopt_long(argc, argv, short_options,
 				long_options, NULL)) != -1) {
 		switch (c) {
-#ifdef ENABLE_RAW
 		case 'a':
 			use_rawmidi = 1;
 			break;
-#endif // ENABLE_RAW
 		case 'h':
 			usage(argv[0]);
 			return EXIT_SUCCESS;
@@ -553,20 +540,14 @@ int main(int argc, char *argv[])
 	}
 
 	int use_seq = 1;
-#ifdef ENABLE_RAW
 	// temporarily change the ALSA error handler to silence warning in case
 	// /dev/snd/seq doesn't exist (e.g.: lacks kernel support or module not
 	// loaded)
 	snd_lib_error_set_handler(quiet_error_handler);
-#endif // ENABLE_RAW
 	err = snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0);
-#ifdef ENABLE_RAW
 	snd_lib_error_set_handler(NULL); // restore default handler
 	if (err)
 		use_seq = 0;
-#else // ENABLE_RAW
-	check_snd("open sequencer", err);
-#endif // ENABLE_RAW
 
 	if (do_list) {
 		list_ports();
@@ -577,7 +558,6 @@ int main(int argc, char *argv[])
 		fatal("Please specify an output port with --output.  Use -l to get a list.");
 	if (!input_name)
 		fatal("Please specify an input port with --input.  Use -l to get a list.");
-#ifdef ENABLE_RAW
 	// ensure that exactly one of rawmidi or seq is enabled
 	if (use_rawmidi)
 		use_seq = 0;
@@ -589,7 +569,6 @@ int main(int argc, char *argv[])
 		err = snd_rawmidi_open(NULL, &raw_out, output_name, SND_RAWMIDI_SYNC);
 		check_snd("open output", err);
 	}
-#endif // ENABLE_RAW
 	int port;
 	int client;
 	if (use_seq) {
@@ -688,7 +667,6 @@ int main(int argc, char *argv[])
 		pollfds = alloca(pollfds_count * sizeof *pollfds);
 		err = snd_seq_poll_descriptors(seq, pollfds, pollfds_count, POLLIN);
 	}
-#ifdef ENABLE_RAW
 	const char test_status_byte = 0x90;
 	char msg[3] = { test_status_byte, 60, 127 };
 	if (use_rawmidi)
@@ -707,7 +685,6 @@ int main(int argc, char *argv[])
 		// device has sent back its response
 		poll(pollfds, pollfds_count, 0);
 	}
-#endif // ENABLE_RAW
 	check_snd("get poll descriptors", err);
 	pollfds_count = err;
 
@@ -728,11 +705,9 @@ int main(int argc, char *argv[])
 
 		if (use_seq)
 			err = snd_seq_event_output_direct(seq, &ev);
-#ifdef ENABLE_RAW
 		char rec_msg[3];
 		if (use_rawmidi)
 			err = snd_rawmidi_write(raw_out, msg, sizeof(msg));
-#endif // ENABLE_RAW
 		check_snd("output MIDI event", err);
 
 		snd_seq_event_t *rec_ev;
@@ -740,10 +715,8 @@ int main(int argc, char *argv[])
 		for (;;) {
 			if (use_seq)
 				rec_ev = NULL;
-#ifdef ENABLE_RAW
 			if (use_rawmidi)
 				memset(rec_msg, 0, sizeof(rec_msg));
-#endif // ENABLE_RAW
 			err = poll(pollfds, pollfds_count, timeout);
 			if (signal_received)
 			       break;
@@ -754,10 +727,8 @@ int main(int argc, char *argv[])
 			unsigned short revents;
 			if (use_seq)
 				err = snd_seq_poll_descriptors_revents(seq, pollfds, pollfds_count, &revents);
-#ifdef ENABLE_RAW
 			if (use_rawmidi)
 				err = snd_rawmidi_poll_descriptors_revents(raw_in, pollfds, pollfds_count, &revents);
-#endif // ENABLE_RAW
 			check_snd("get poll events", err);
 			if (revents & (POLLERR | POLLNVAL))
 				break;
@@ -770,7 +741,6 @@ int main(int argc, char *argv[])
 				if (rec_ev->type == SND_SEQ_EVENT_NOTEON)
 					break;
 			}
-#ifdef ENABLE_RAW
 			if (use_rawmidi) {
 				err = snd_rawmidi_read(raw_in, rec_msg, sizeof(rec_msg));
 				check_snd("input MIDI event", err);
@@ -778,7 +748,6 @@ int main(int argc, char *argv[])
 				if (test_status_byte == rec_msg[0])
 					break;
 			}
-#endif // ENABLE_RAW
 		}
 		if (!received_something)
 			break;
@@ -860,12 +829,10 @@ int main(int argc, char *argv[])
 
 	if (use_seq)
 		snd_seq_close(seq);
-#ifdef ENABLE_RAW
 	if (use_rawmidi) {
 		snd_rawmidi_close(raw_in);
 		snd_rawmidi_close(raw_out);
 	}
-#endif // ENABLE_RAW
 
 	if (verbose) {
 		if (max_delay / 1000000.0 > 6.0) { // latencies <= 6ms are o.k. imho
