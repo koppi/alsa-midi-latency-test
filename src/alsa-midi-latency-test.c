@@ -33,10 +33,19 @@
 #include <sys/utsname.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof *(a))
+#define ENABLE_UART
 
 static snd_seq_t *seq;
 static snd_rawmidi_t *raw_in;
 static snd_rawmidi_t *raw_out;
+#ifdef ENABLE_UART
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <termios.h>
+#endif // ENABLE_UART
+
 static volatile sig_atomic_t signal_received = 0;
 
 void print_uname()
@@ -335,6 +344,11 @@ static void usage(const char *argv0)
 	       "  -i, --input=client:port    port to receive events from\n"
 	       "  -l, --list                 list available midi input/output ports\n\n"
 	       "  -a, --raw                  interpret ports as snd_rawmidi names\n"
+#ifdef ENABLE_UART
+	       "  -u, --uart baudrate        interpret ports as UART devices (any valid device in /dev.\n"
+	       "                             UART devices will not be listed with -l). `baudrate' should\n"
+	       "                             be one of the ones supported by the system\n"
+#endif // ENABLE_UART
 	       "  -T, --timeout=# of ms      how long to wait before considering a message lost (default is 1000)\n"
 	       "  -t, --terse                only send to stdout the test specs and test results:\n"
 	       "                             '<#samples>, <rt>, <priority>, <skip>, <wait_ms>\n"
@@ -394,14 +408,122 @@ static void sighandler(int sig)
 	signal_received = 1;
 }
 
+#ifdef ENABLE_UART
+/* error handling for POSIX functions */
+static void check_posix(const char *operation, int err)
+{
+	if (err)
+		fatal("cannot %s - %s", operation, strerror(err));
+}
+
+static unsigned int speedToBaudRate(unsigned int speed) {
+	switch(speed) {
+		case 50:    	speed = B50;
+		break;
+		case 75:    	speed = B75;
+		break;
+		case 110:   	speed = B110;
+		break;
+		case 134:   	speed = B134;
+		break;
+		case 150:   	speed = B150;
+		break;
+		case 200:   	speed = B200;
+		break;
+		case 300:   	speed = B300;
+		break;
+		case 600:   	speed = B600;
+		break;
+		case 1200:  	speed = B1200;
+		break;
+		case 1800:  	speed = B1800;
+		break;
+		case 2400:  	speed = B2400;
+		break;
+		case 4800:  	speed = B4800;
+		break;
+		case 9600:  	speed = B9600;
+		break;
+		case 19200: 	speed = B19200;
+		break;
+		case 38400: 	speed = B38400;
+		break;
+		case 57600: 	speed = B57600;
+		break;
+		case 115200:	speed = B115200;
+		break;
+		case 230400:	speed = B230400;
+		break;
+		case 0:
+		//nobreak
+		default:
+		speed = B0;
+		break;
+	}
+	return speed;
+}
+
+static int setInterfaceAttribs(int fd, unsigned int speed) {
+	struct termios tty;
+
+	if (tcgetattr(fd, &tty) < 0) {
+		printf("Error from tcgetattr: %s\n", strerror(errno));
+		return -1;
+	}
+
+	cfsetospeed(&tty, (speed_t)speed);
+	cfsetispeed(&tty, (speed_t)speed);
+
+	tty.c_cflag |= (CLOCAL | CREAD); /* ignore modem controls */
+	tty.c_cflag &= ~CSIZE;
+	tty.c_cflag |= CS8;      /* 8-bit characters */
+	tty.c_cflag &= ~PARENB;  /* no parity bit */
+	tty.c_cflag &= ~CSTOPB;  /* only need 1 stop bit */
+	tty.c_cflag &= ~CRTSCTS; /* no hardware flowcontrol */
+
+	/* setup for non-canonical mode */
+	tty.c_iflag &=
+	~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+	tty.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+	tty.c_oflag &= ~OPOST;
+
+	/* fetch bytes as they become available */
+	tty.c_cc[VMIN] = 1;
+	tty.c_cc[VTIME] = 1;
+
+	if (tcsetattr(fd, TCSANOW, &tty) != 0) {
+		printf("Error from tcsetattr: %s\n", strerror(errno));
+		return -1;
+	}
+	return 0;
+}
+
+static void setMinCount(int fd, int mcount) {
+	struct termios tty;
+
+	if (tcgetattr(fd, &tty) < 0) {
+		printf("Error tcgetattr: %s\n", strerror(errno));
+		return;
+	}
+
+	tty.c_cc[VMIN] = mcount ? 1 : 0;
+	tty.c_cc[VTIME] = 5; /* half second timer */
+
+	if (tcsetattr(fd, TCSANOW, &tty) < 0) {
+		printf("Error tcsetattr: %s\n", strerror(errno));
+	}
+}
+#endif // ENABLE_UART
+
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlaT:to:i:RP:s:S:w:r123456x";
+	static char short_options[] = "hVlau:T:to:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
 		{"list", 0, NULL, 'l'},
 		{"raw", 0, NULL, 'a'},
+		{"uart", 1, NULL, 'u'},
 		{"timeout", 1, NULL, 'T'},
 		{"terse", 0, NULL, 't'},
 		{"output", 1, NULL, 'o'},
@@ -430,6 +552,10 @@ int main(int argc, char *argv[])
 	snd_seq_addr_t input_addr;
 	int c, err;
 	int use_rawmidi = 0;
+#ifdef ENABLE_UART
+	int use_uart = 0;
+	int uart_speed = 0;
+#endif // ENABLE_UART
 	unsigned int timeout = 1000;
 	int verbose = 1;
 
@@ -439,6 +565,12 @@ int main(int argc, char *argv[])
 		case 'a':
 			use_rawmidi = 1;
 			break;
+#ifdef ENABLE_UART
+		case 'u':
+			use_uart = 1;
+			uart_speed = atoi(optarg);
+			break;
+#endif //ENABLE_UART
 		case 'h':
 			usage(argv[0]);
 			return EXIT_SUCCESS;
@@ -563,12 +695,39 @@ int main(int argc, char *argv[])
 		use_seq = 0;
 	else
 		use_rawmidi = !use_seq;
+#ifdef ENABLE_UART
+	if (use_uart)
+		use_rawmidi = use_seq = 0;
+#endif // ENABLE_UART
 	if (use_rawmidi) {
 		err = snd_rawmidi_open(&raw_in, NULL, input_name, SND_RAWMIDI_NONBLOCK);
 		check_snd("open input", err);
 		err = snd_rawmidi_open(NULL, &raw_out, output_name, SND_RAWMIDI_SYNC);
 		check_snd("open output", err);
 	}
+#ifdef ENABLE_UART
+	int uart_fd_in = -1;
+	int uart_fd_out= -1;
+	if (use_uart) {
+		uart_fd_in = open(input_name, O_RDWR | O_NOCTTY | O_SYNC
+				);
+		if (uart_fd_in < 0)
+			check_posix("open input", errno);
+		uart_fd_out = open(output_name, O_RDWR | O_NOCTTY | O_SYNC
+				);
+		if (uart_fd_out < 0)
+			check_posix("open output", errno);
+		unsigned int baudRate = speedToBaudRate(uart_speed);
+		if(B0 == baudRate) {
+			fprintf(stderr, "Error setting BAUD rate: %d speed not supported\n", uart_speed);
+			return -1;
+		}
+		setInterfaceAttribs(uart_fd_in, baudRate);
+		setInterfaceAttribs(uart_fd_out, baudRate);
+		setMinCount(uart_fd_in, 0); /* set to pure timed read */
+		setMinCount(uart_fd_out, 0); /* set to pure timed read */
+	}
+#endif // ENABLE_UART
 	int port;
 	int client;
 	if (use_seq) {
@@ -655,6 +814,7 @@ int main(int argc, char *argv[])
 	snd_seq_event_t ev;
 	int pollfds_count;
 	struct pollfd *pollfds;
+	err = 0;
 	if (use_seq)
 	{
 		snd_seq_ev_clear(&ev);
@@ -687,6 +847,16 @@ int main(int argc, char *argv[])
 	}
 	check_snd("get poll descriptors", err);
 	pollfds_count = err;
+#ifdef ENABLE_UART
+	if (use_uart)
+	{
+		pollfds_count = 1;
+		pollfds = alloca(pollfds_count * sizeof(*pollfds));
+		pollfds[0].fd = uart_fd_in;
+		pollfds[0].events = POLLIN;
+		poll(pollfds, pollfds_count, 0);
+	}
+#endif // ENABLE_UART
 
 	unsigned int sample_nr = 0;
 	unsigned int min_delay = UINT_MAX, max_delay = 0;
@@ -709,13 +879,26 @@ int main(int argc, char *argv[])
 		if (use_rawmidi)
 			err = snd_rawmidi_write(raw_out, msg, sizeof(msg));
 		check_snd("output MIDI event", err);
+#ifdef ENABLE_UART
+		if (use_uart)
+		{
+			err = write(uart_fd_out, msg, sizeof(msg));
+			if (err != sizeof(msg))
+				check_posix("output UART event", errno);
+		}
+#endif // ENABLE_UART
 
 		snd_seq_event_t *rec_ev;
 		int received_something = 0;
 		for (;;) {
 			if (use_seq)
 				rec_ev = NULL;
-			if (use_rawmidi)
+			if (
+				use_rawmidi
+#ifdef ENABLE_UART
+				|| use_uart
+#endif // ENABLE_UART
+			)
 				memset(rec_msg, 0, sizeof(rec_msg));
 			err = poll(pollfds, pollfds_count, timeout);
 			if (signal_received)
@@ -730,6 +913,10 @@ int main(int argc, char *argv[])
 			if (use_rawmidi)
 				err = snd_rawmidi_poll_descriptors_revents(raw_in, pollfds, pollfds_count, &revents);
 			check_snd("get poll events", err);
+#ifdef ENABLE_UART
+			if (use_uart)
+				revents = pollfds[0].revents;
+#endif // ENABLE_UART
 			if (revents & (POLLERR | POLLNVAL))
 				break;
 			if (!(revents & POLLIN))
@@ -748,6 +935,17 @@ int main(int argc, char *argv[])
 				if (test_status_byte == rec_msg[0])
 					break;
 			}
+#ifdef ENABLE_UART
+			if (use_uart) {
+				err = read(uart_fd_in, rec_msg, sizeof(rec_msg));
+				// TODO: handle the case where these are not received all at once
+				if (err != sizeof(rec_msg))
+					check_snd("input UART event", errno);
+				received_something = 1;
+				if (test_status_byte == rec_msg[0])
+					break;
+			}
+#endif // ENABLE_UART
 		}
 		if (!received_something)
 			break;
