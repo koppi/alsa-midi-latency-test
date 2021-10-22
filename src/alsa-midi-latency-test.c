@@ -348,6 +348,7 @@ static void usage(const char *argv0)
 	       "  -u, --uart baudrate        interpret ports as UART devices (any valid device in /dev.\n"
 	       "                             UART devices will not be listed with -l). `baudrate' should\n"
 	       "                             be one of the ones supported by the system\n"
+	       "  -y <arg>, --system=<arg>   execute <arg> (via system(3)) after opening file descriptors for I/O\n"
 #endif // ENABLE_UART
 	       "  -T, --timeout=# of ms      how long to wait before considering a message lost (default is 1000)\n"
 	       "  -t, --terse                only send to stdout the test specs and test results:\n"
@@ -517,13 +518,14 @@ static void setMinCount(int fd, int mcount) {
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlau:T:to:i:RP:s:S:w:r123456x";
+	static char short_options[] = "hVlau:y:T:to:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
 		{"list", 0, NULL, 'l'},
 		{"raw", 0, NULL, 'a'},
 		{"uart", 1, NULL, 'u'},
+		{"system", 1, NULL, 'y'},
 		{"timeout", 1, NULL, 'T'},
 		{"terse", 0, NULL, 't'},
 		{"output", 1, NULL, 'o'},
@@ -555,6 +557,7 @@ int main(int argc, char *argv[])
 #ifdef ENABLE_UART
 	int use_uart = 0;
 	int uart_speed = 0;
+	const char* system_exec = NULL;
 #endif // ENABLE_UART
 	unsigned int timeout = 1000;
 	int verbose = 1;
@@ -569,6 +572,9 @@ int main(int argc, char *argv[])
 		case 'u':
 			use_uart = 1;
 			uart_speed = atoi(optarg);
+			break;
+		case 'y':
+			system_exec = optarg;
 			break;
 #endif //ENABLE_UART
 		case 'h':
@@ -726,6 +732,13 @@ int main(int argc, char *argv[])
 		setInterfaceAttribs(uart_fd_out, baudRate);
 		setMinCount(uart_fd_in, 0); /* set to pure timed read */
 		setMinCount(uart_fd_out, 0); /* set to pure timed read */
+	}
+	if (system_exec) {
+		err = system(system_exec);
+		if (err) {
+			fprintf(stderr, "executing '%s' returned '%d'\n", system_exec, err);
+			return 1;
+		}
 	}
 #endif // ENABLE_UART
 	int port;
