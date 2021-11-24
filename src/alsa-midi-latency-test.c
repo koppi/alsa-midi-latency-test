@@ -351,6 +351,7 @@ static void usage(const char *argv0)
 	       "  -y <arg>, --system=<arg>   execute <arg> (via system(3)) after opening file descriptors for I/O\n"
 #endif // ENABLE_UART
 	       "  -T, --timeout=# of ms      how long to wait before considering a message lost (default is 1000)\n"
+	       "  -g, --grace  # of fail     gracefully fail (i.e.: print results) after # of failures (i.e.: timeout/2 exceeded)\n"
 	       "  -t, --terse                only send to stdout the test specs and test results:\n"
 	       "                             '<#samples>, <rt>, <priority>, <skip>, <wait_ms>\n"
 	       "                              <random>, <min_latency_ms>, <mean_latency_ms>, <max_latency_ms>'\n"
@@ -518,7 +519,7 @@ static void setMinCount(int fd, int mcount) {
 
 int main(int argc, char *argv[])
 {
-	static char short_options[] = "hVlau:y:T:to:i:RP:s:S:w:r123456x";
+	static char short_options[] = "hVlau:y:T:g:to:i:RP:s:S:w:r123456x";
 	static struct option long_options[] = {
 		{"help", 0, NULL, 'h'},
 		{"version", 0, NULL, 'V'},
@@ -527,6 +528,7 @@ int main(int argc, char *argv[])
 		{"uart", 1, NULL, 'u'},
 		{"system", 1, NULL, 'y'},
 		{"timeout", 1, NULL, 'T'},
+		{"grace", 1, NULL, 'g'},
 		{"terse", 0, NULL, 't'},
 		{"output", 1, NULL, 'o'},
 		{"input", 1, NULL, 'i'},
@@ -560,6 +562,7 @@ int main(int argc, char *argv[])
 	const char* system_exec = NULL;
 #endif // ENABLE_UART
 	unsigned int timeout = 1000;
+	unsigned int grace = 0;
 	int verbose = 1;
 
 	while ((c = getopt_long(argc, argv, short_options,
@@ -625,6 +628,9 @@ int main(int argc, char *argv[])
 			break;
 		case 'T':
 			timeout = atoi(optarg);
+			break;
+		case 'g':
+			grace = atoi(optarg);
 			break;
 		case 't':
 			verbose = 0;
@@ -874,6 +880,7 @@ int main(int argc, char *argv[])
 	unsigned int sample_nr = 0;
 	unsigned int min_delay = UINT_MAX, max_delay = 0;
 	long unsigned int total_delay = 0;
+	unsigned int graceTimeouts = 0;
 	for (c = 0; c < nr_samples; ++c) {
 		if (wait) {
 			if (random_wait)
@@ -984,8 +991,16 @@ int main(int argc, char *argv[])
 		total_delay += delay_ns;
 
 		ev.data.note.channel ^= 1; // prevent running status
+
+		if (delay_ns >= (timeout * 1000000 / 2) && sample_nr >= skip_samples) {
+			++graceTimeouts;
+		}
+		if (grace && graceTimeouts >= grace) {
+			fprintf(stderr, "Exiting earlier because of %d timeouts / 2\n", graceTimeouts);
+			break;
+		}
 	}
-	unsigned int mean_delay = total_delay / nr_samples;
+	unsigned int mean_delay = total_delay / sample_nr;
 
 	if (verbose)
 		printf("\n> done.\n\n> latency distribution:\n");
@@ -1070,7 +1085,7 @@ int main(int argc, char *argv[])
 		}
 	} else {
 		printf("%6d, %1d, %3d, %3d, %.3f, %1d, %.3f, %.3f, %.3f\n",
-			nr_samples,
+			sample_nr,
 			do_realtime,
 			rt_prio,
 			skip_samples,
