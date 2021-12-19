@@ -6,9 +6,6 @@ AM_INIT_AUTOMAKE
 
 AC_PREFIX_DEFAULT(/usr)
 
-AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.15])
-
 dnl Checks for programs.
 
 dnl try to gues cross-compiler if not set
@@ -29,7 +26,6 @@ AC_PROG_CC
 dnl AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AM_PATH_ALSA(1.0.13)
 
 dnl Checks for header files.
 AC_HEADER_STDC
