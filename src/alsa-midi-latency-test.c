@@ -1070,7 +1070,7 @@ int main(int argc, char *argv[])
 			printf("  - if you're running this test on a realtime OS - `uname -a` should contain '-rt',\n\n");
 			printf("  - your OS' scheduling priorities - `chrt -p [pidof process name|IRQ-?]`.\n\n");
 			printf(" Have a look at\n");
-			printf("  http://www.linuxaudio.org/mailarchive/lat/\n");
+			printf("  https://www.linuxaudio.org/resources.html\n");
 			printf(" to find out, howto fix issues with high midi latencies.\n\n");
 
 			return EXIT_FAILURE;
