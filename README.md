@@ -1,4 +1,4 @@
-# alsa-midi-latency-test [![travis](https://travis-ci.org/koppi/alsa-midi-latency-test.png?branch=master)](https://travis-ci.org/koppi/alsa-midi-latency-test)
+# alsa-midi-latency-test
 
 alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa subsystem of the Linux kernel using a high precision timer. It calculates the worst case roundtrip time of all sent MIDI messages and displays a histogram of the roundtrip time jitter:
 
