@@ -86,6 +86,6 @@
 
 	Please report bugs to the authors.
 
-	 * (@koppi)[https://github.com/koppi]
+	 * [@koppi](https://github.com/koppi)
 
 	-- November, 2009, last updated Dez 2021.
