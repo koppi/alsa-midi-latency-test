@@ -76,6 +76,10 @@ sudo apt -f install # for linux-sound-base package
 
    Linux configuration checker for systems to be used for real-time audio.
 
+ * https://codeberg.org/rtcqs/rtcqs
+
+   rtcqs, pronounced arteeseeks, is a Python port of the realtimeconfigquickscan project.
+
 ## Thanks
 
  * to [Arnout Engelen](https://github.com/raboof) for initial testing and giving feedback.
