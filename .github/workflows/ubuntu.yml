@@ -17,6 +17,8 @@ jobs:
       run: sudo mk-build-deps --install debian/control
     - name: build the package
       run: dpkg-buildpackage -b -rfakeroot -us -uc
+    - name: install runtime dependencies
+      run: sudo apt -y install linux-sound-base
     - name: install the package
       run: sudo dpkg -i ../alsa-midi-latency-test*deb
     - name: install package dependencies
