@@ -31,6 +31,8 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 sudo apt -f install # for linux-sound-base package
 ```
 
+– Tested on Ubuntu 22.04 [![.github/workflows/ubuntu.yml](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml)
+
 ## Run alsa-midi-latency-test
  * ``` $ alsa-midi-latency-test -l ```
 
