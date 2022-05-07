@@ -84,13 +84,13 @@ sudo apt -f install # for linux-sound-base package
 
 ## Thanks
 
- * to [Arnout Engelen](https://github.com/raboof) for initial testing and giving feedback.
- * to [Clemens Ladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and alsa midi event handling.
+ * to **Arnout Engelen** - [raboof](https://github.com/raboof) for initial testing and giving feedback.
+ * to **Clemens Ladisch** - [cladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and alsa midi event handling.
 
 ## BUGS and AUTHORS
 
 Please report bugs to the authors.
 
- * [@koppi](https://github.com/koppi)
+ * **Jakob Flierl** - [koppi](https://github.com/koppi)
 
--- November, 2009, last updated Jan 2022.
+-- November, 2009, last updated Mai 2022.
