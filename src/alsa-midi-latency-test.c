@@ -1,7 +1,7 @@
 /*
  * alsa-midi-latency-test.c - measure the roundtrip time of MIDI messages
  *
- * Copyright (C) 2009 - 2021 Jakob Flierl <jakob.flierl@gmail.com>
+ * Copyright (C) 2009 - 2023 Jakob Flierl <jakob.flierl@gmail.com>
  *
  *
  *  This program is free software; you can redistribute it and/or modify

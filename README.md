@@ -94,4 +94,4 @@ Please report bugs to the authors.
 
  * **Jakob Flierl** - [koppi](https://github.com/koppi)
 
--- November, 2009, last updated Mai 2022.
+-- November, 2009, last updated Jan 2023.
