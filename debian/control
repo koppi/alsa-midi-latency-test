@@ -8,7 +8,7 @@ Homepage: http://github.com/koppi/alsa-midi-latency-test
 
 Package: alsa-midi-latency-test
 Architecture: linux-any
-Depends: pciutils (>=1:2.1.11-4), lsb-base (>= 3.0-9), linux-sound-base (>= 1.0.15-1), ${misc:Depends}, ${shlibs:Depends}
+Depends: pciutils (>=1:2.1.11-4), lsb-base (>= 3.0-9), ${misc:Depends}, ${shlibs:Depends}
 Recommends: alsa-base (>= 1.0.15)
 Conflicts: udev (<< 0.060), alsa-base (<< 1.0.9b-3)
 Description: Utility for measuring ALSA midi latency
