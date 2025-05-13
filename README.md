@@ -73,18 +73,14 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
    The MidiTest software for Microsoft Windows.
 
- * https://github.com/raboof/realtimeconfigquickscan
-
-   Linux configuration checker for systems to be used for real-time audio.
-
  * https://codeberg.org/rtcqs/rtcqs
 
-   rtcqs, pronounced arteeseeks, is a Python port of the realtimeconfigquickscan project.
+   rtcqs is a Python utility to analyze your system and detect possible bottlenecks that could have a negative impact on the performance of your system when working with Linux audio.
 
 ## Thanks
 
  * to **Arnout Engelen** - [raboof](https://github.com/raboof) for initial testing and giving feedback.
- * to **Clemens Ladisch** - [cladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and alsa midi event handling.
+ * to **Clemens Ladisch** - [cladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and ALSA midi event handling.
  * to **Giulio Moro** - [giuliomoro](https://github.com/giuliomoro) for code cleanup and various fixes and support for UART I/O.
 
 ## BUGS and AUTHORS
