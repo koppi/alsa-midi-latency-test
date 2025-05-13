@@ -30,7 +30,7 @@ debuild -uc -us
 sudo dpkg -i ../alsa-midi-latency-test*.deb
 ```
 
-– Tested on Ubuntu 22.04 [![.github/workflows/ubuntu.yml](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml)
+– Tested on Ubuntu 25.04 [![.github/workflows/ubuntu.yml](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml)
 
 ## Run alsa-midi-latency-test
  * ``` $ alsa-midi-latency-test -l ```
@@ -93,4 +93,4 @@ Please report bugs to the authors.
 
  * **Jakob Flierl** - [koppi](https://github.com/koppi)
 
--- November, 2009, last updated Jan 2023.
+-- November, 2009, last updated May 2025.
