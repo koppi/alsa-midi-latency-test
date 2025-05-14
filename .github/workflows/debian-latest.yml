@@ -1,0 +1,32 @@
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: debian-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: install devscripts
+      run: |
+        sudo DEBIAN_FRONTEND=noninteractive apt -qq -y install devscripts equivs lintian
+        mk-build-deps -i -s sudo -t "apt --yes --no-install-recommends"
+        
+    - name: build the package
+      run: dpkg-buildpackage -b -rfakeroot -us -uc
+      
+    - name: install runtime dependencies
+      run: sudo apt -y install linux-sound-base
+      
+    - name: install the package
+      run: sudo dpkg -i ../alsa-midi-latency-test*deb
+      
+    - name: install package dependencies
+      run: sudo apt -f install
+
+    - name: run lintian
+      run: lintian ../alsa-midi-latency-test*deb | lintian-info
