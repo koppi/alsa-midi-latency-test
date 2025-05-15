@@ -103,16 +103,16 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
    rtcqs is a Python utility to analyze your system and detect possible bottlenecks that could have a negative impact on the performance of your system when working with Linux™ audio.
 
-## Thanks
+## Thanks to
 
- * to **Arnout Engelen** - [raboof](https://github.com/raboof) for initial testing and giving feedback.
- * to **Clemens Ladisch** - [cladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and ALSA midi event handling.
- * to **Giulio Moro** - [giuliomoro](https://github.com/giuliomoro) for code cleanup and various fixes and support for UART I/O.
+ * [Arnout Engelen](https://github.com/raboof) for initial testing.
+ * - [Clemens Ladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and ALSA midi event handling.
+ * - [Giulio Moro](https://github.com/giuliomoro) for code cleanup, various fixes and support for UART I/O.
 
 ## BUGS and AUTHORS
 
 Please [report bugs](https://github.com/koppi/alsa-midi-latency-test/issues) to the authors:
 
- * **Jakob Flierl** - [koppi](https://github.com/koppi)
+ * [Jakob Flierl](https://github.com/koppi)
 
--- November, 2009, last updated May 2025.
+Last updated May 2025.
