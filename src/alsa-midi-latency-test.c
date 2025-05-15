@@ -1,7 +1,7 @@
 /*
  * alsa-midi-latency-test.c - measure the roundtrip time of MIDI messages
  *
- * Copyright (C) 2009 - 2023 Jakob Flierl <jakob.flierl@gmail.com>
+ * Copyright (C) 2009 - 2025 Jakob Flierl <jakob.flierl@gmail.com>
  *
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -808,7 +808,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (verbose) {
-		printf("\n> sampling %d midi latency values - please wait ...\n", nr_samples);
+		printf("\n> sampling %d midi latency values - please wait …\n", nr_samples);
 		printf("> press Ctrl+C to abort test\n");
 	}
 
@@ -1079,7 +1079,9 @@ int main(int argc, char *argv[])
 			printf("\n> SUCCESS\n");
 			printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
 			printf(" mean latency was %.*f ms\n", precision, mean_delay /1000000.0);
-			printf(" worst latency was %.*f ms, which is great.\n\n", precision, max_delay/1000000.0);
+			printf(" worst latency was %.*f ms, which is great.\n", precision, max_delay/1000000.0);
+
+			printf("\n> Share your benchmarking results in the wiki at:\n\n https://github.com/koppi/alsa-midi-latency-test/wiki\n\n");
 
 			return EXIT_SUCCESS;
 		}
