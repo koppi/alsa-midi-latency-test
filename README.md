@@ -1,8 +1,34 @@
-# alsa-midi-latency-test
-
-alsa-midi-latency-test measures the roundtrip time of a MIDI message in the alsa subsystem of the Linux kernel using a high precision timer. It calculates the worst case roundtrip time of all sent MIDI messages and displays a histogram of the roundtrip time jitter:
+``alsa-midi-latency-test`` is a Linux™-based tool used to measure the roundtrip delay of MIDI messages within the ALSA (Advanced Linux™ Sound Architecture) subsystem. The tool utilizes a high-precision timer to calculate the time it takes for a MIDI message to travel from the ALSA source to the ALSA sink, and back. It's a helpful way to understand and troubleshoot MIDI latency issues, often in situations where noticeable delay is encountered between playing a MIDI keyboard and hearing the sound. 
 
 ![alsa-midi-latency-test](https://raw.github.com/koppi/alsa-midi-latency-test/master/alsa-midi-latency-test.gif "alsa midi latency test")
+
+* Roundtrip Measurement:
+
+  The tool measures the total time it takes for a MIDI message to complete a round trip, meaning from the output of one device to the input of another.
+
+* High-Precision Timer:
+
+  It uses a high-precision timer to accurately measure the delay, which is crucial for precise latency measurements. 
+
+* ALSA Subsystem Focus:
+  
+  The tool specifically focuses on the ALSA subsystem, allowing users to diagnose latency issues related to Linux's™ audio/MIDI infrastructure.
+
+How alsa-midi-latency-test can help:
+
+* Diagnosing MIDI Latency:
+The tool can help users pinpoint the source of latency, whether it's related to the MIDI hardware, software drivers, or system configuration. 
+
+* Optimizing ALSA Settings:
+
+  The measurements can guide users in adjusting ALSA settings, such as buffer sizes, to minimize latency.
+
+* Identifying System Bottlenecks:
+
+  In some cases, latency can be a result of system limitations, and ``alsa-midi-latency-test`` can help identify those bottlenecks.
+
+In summary, ``alsa-midi-latency-test`` is a valuable tool for anyone working with MIDI and ALSA on Linux™, allowing them to measure and troubleshoot latency issues effectively. 
+
 
 ## Install from source code
 ```bash
@@ -60,14 +86,14 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
  * http://lists.linuxaudio.org/listinfo/linux-audio-tuning
 
-   The linux-audio tuning (LAT) mailing list is to help GNU/Linux distribution
+   The linux-audio tuning (LAT) mailing list is to help GNU/Linux™ distribution
    maintainers  and  other interested users to share information on system
-   performance tuning matters, especially with regard to real-time Linux
+   performance tuning matters, especially with regard to real-time Linux™
    kernels.
 
  * http://www.alsa-project.org/
 
-   The Advanced Linux Sound Architecture.
+   The Advanced Linux™ Sound Architecture.
 
  * [http://www.evc-soft.nl/evc/products/miditest/](http://web.archive.org/web/20061128213256/http://www.evc-soft.nl/evc/products/miditest/)
 
@@ -75,7 +101,7 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
  * https://codeberg.org/rtcqs/rtcqs
 
-   rtcqs is a Python utility to analyze your system and detect possible bottlenecks that could have a negative impact on the performance of your system when working with Linux audio.
+   rtcqs is a Python utility to analyze your system and detect possible bottlenecks that could have a negative impact on the performance of your system when working with Linux™ audio.
 
 ## Thanks
 
@@ -85,7 +111,7 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
 ## BUGS and AUTHORS
 
-Please report bugs to the authors.
+Please [report bugs](https://github.com/koppi/alsa-midi-latency-test/issues) to the authors:
 
  * **Jakob Flierl** - [koppi](https://github.com/koppi)
 
