@@ -51,7 +51,7 @@ Install alsa-midi-latency-test as follows:
 ```bash
 sudo make install
 ```
-or build and install an Debian / Ubuntu package:
+or build and install a Debian / Ubuntu package:
 ```bash
 sudo apt -y install devscripts
 debuild -uc -us
