@@ -59,17 +59,17 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 – Tested on Ubuntu 25.04 [![.github/workflows/ubuntu.yml](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/koppi/alsa-midi-latency-test/actions/workflows/ubuntu.yml)
 
 ## Run alsa-midi-latency-test
- * ``` $ alsa-midi-latency-test -l ```
+ * ``` alsa-midi-latency-test -l ```
 
    Lists available MIDI input and output ports.
 
- * ``` $ alsa-midi-latency-test -i [input port] -o [output port] ```
+ * ``` alsa-midi-latency-test -i [input port] -o [output port] ```
 
    This runs the benchmark with the given input and output port. Note, that the
    input and output ports have to be connected using a MIDI cable in the real
    hardware to loop the MIDI message back.
 
- * ``` $ man alsa-midi-latency-test ```
+ * ``` man alsa-midi-latency-test ```
 
    The man page contains documentation for all available command line switches.
 
