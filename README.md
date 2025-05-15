@@ -4,29 +4,29 @@ The tool utilizes a high-precision timer to calculate the time it takes for a MI
 
 ![alsa-midi-latency-test](https://raw.github.com/koppi/alsa-midi-latency-test/master/alsa-midi-latency-test.gif "alsa-midi-latency-test")
 
-* Roundtrip Measurement:
+* **Roundtrip Measurement**
 
   The tool measures the total time it takes for a MIDI message to complete a round trip, meaning from the output of one device to the input of another.
 
-* High-Precision Timer:
+* **High-Precision Timer**
 
   It uses a high-precision timer to accurately measure the delay, which is crucial for precise latency measurements. 
 
-* ALSA Subsystem Focus:
+* **ALSA Subsystem Focus**
   
   The tool specifically focuses on the ALSA subsystem, allowing users to diagnose latency issues related to Linux's™ audio/MIDI infrastructure.
 
 How alsa-midi-latency-test can help:
 
-* Diagnosing MIDI Latency:
+* **Diagnosing MIDI Latency**
 
   The tool can help users pinpoint the source of latency, whether it's related to the MIDI hardware, software drivers, or system configuration. 
 
-* Optimizing ALSA Settings:
+* **Optimizing ALSA Settings**
 
   The measurements can guide users in adjusting ALSA settings, such as buffer sizes, to minimize latency.
 
-* Identifying System Bottlenecks:
+* **Identifying System Bottlenecks**
 
   In some cases, latency can be a result of system limitations, and ``alsa-midi-latency-test`` can help identify those bottlenecks.
 
