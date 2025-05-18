@@ -105,8 +105,8 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
 ## Thanks to
 
- * [Arnout Engelen](https://github.com/raboof) for initial testing.
- * [Clemens Ladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and ALSA midi event handling.
+ * [Arnout Engelen](https://github.com/raboof) for initial testing,
+ * [Clemens Ladisch](https://github.com/cladisch) for a number of fixes with the high precision timer and ALSA midi event handling,
  * [Giulio Moro](https://github.com/giuliomoro) for code cleanup, various fixes and support for UART I/O.
 
 ## BUGS and AUTHORS
