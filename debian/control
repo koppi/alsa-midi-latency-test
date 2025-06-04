@@ -2,7 +2,7 @@ Source: alsa-midi-latency-test
 Section: sound
 Priority: optional
 Maintainer: Jakob Flierl <jakob.flierl@gmail.com>
-Build-Depends: debhelper-compat (= 13), libtool, autotools-dev, automake, libasound2-dev (>= 1.2.13), dh-autoreconf, autopoint
+Build-Depends: debhelper-compat (= 13), libtool, autotools-dev, automake, libasound2-dev (>= 1.2.11), dh-autoreconf, autopoint
 Standards-Version: 4.7.0
 Homepage: http://github.com/koppi/alsa-midi-latency-test
 Vcs-Git: https://github.com/koppi/alsa-midi-latency-test.git
