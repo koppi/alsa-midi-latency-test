@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_PREREQ([2.72])
+AC_PREREQ([2.71])
 AC_INIT([alsa-midi-latency-test],[0.0.6])
 AC_CONFIG_SRCDIR([src/alsa-midi-latency-test.c])
 AC_PREFIX_DEFAULT(/usr)
