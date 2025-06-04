@@ -1,4 +1,4 @@
-``alsa-midi-latency-test`` is a Linux™-based tool used to measure the roundtrip delay of MIDI messages within the ALSA (Advanced Linux™ Sound Architecture) subsystem.
+``alsa-midi-latency-test`` is a Linux©-based tool used to measure the roundtrip delay of MIDI messages within the ALSA (Advanced Linux© Sound Architecture) subsystem.
 
 The tool utilizes a high-precision timer to calculate the time it takes for a MIDI message to travel from the ALSA source to the ALSA sink, and back. It's a helpful way to understand and troubleshoot MIDI latency issues, often in situations where noticeable delay is encountered between playing a MIDI keyboard and hearing the sound. 
 
@@ -14,7 +14,7 @@ The tool utilizes a high-precision timer to calculate the time it takes for a MI
 
 * **ALSA Subsystem Focus**
   
-  The tool specifically focuses on the ALSA subsystem, allowing users to diagnose latency issues related to Linux's™ audio/MIDI infrastructure.
+  The tool specifically focuses on the ALSA subsystem, allowing users to diagnose latency issues related to Linux's© audio/MIDI infrastructure.
 
 How alsa-midi-latency-test can help:
 
@@ -30,7 +30,7 @@ How alsa-midi-latency-test can help:
 
   In some cases, latency can be a result of system limitations, and ``alsa-midi-latency-test`` can help identify those bottlenecks.
 
-In summary, ``alsa-midi-latency-test`` is a valuable tool for anyone working with MIDI and ALSA on Linux™, allowing them to measure and troubleshoot latency issues effectively. 
+In summary, ``alsa-midi-latency-test`` is a valuable tool for anyone working with MIDI and ALSA on Linux©, allowing them to measure and troubleshoot latency issues effectively. 
 
 ## Install from source code
 ```shell
@@ -86,14 +86,14 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
  * http://lists.linuxaudio.org/listinfo/linux-audio-tuning
 
-   The linux-audio tuning (LAT) mailing list is to help GNU/Linux™ distribution
+   The linux-audio tuning (LAT) mailing list is to help GNU/Linux© distribution
    maintainers  and  other interested users to share information on system
-   performance tuning matters, especially with regard to real-time Linux™
+   performance tuning matters, especially with regard to real-time Linux©
    kernels.
 
  * http://www.alsa-project.org
 
-   The Advanced Linux™ Sound Architecture.
+   The Advanced Linux© Sound Architecture.
 
  * [http://www.evc-soft.nl/evc/products/miditest](http://web.archive.org/web/20061128213256/http://www.evc-soft.nl/evc/products/miditest)
 
@@ -101,7 +101,7 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
  * https://codeberg.org/rtcqs/rtcqs
 
-   rtcqs is a Python utility to analyze your system and detect possible bottlenecks that could have a negative impact on the performance of your system when working with Linux™ audio.
+   rtcqs is a Python utility to analyze your system and detect possible bottlenecks that could have a negative impact on the performance of your system when working with Linux© audio.
 
 ## Thanks to
 
