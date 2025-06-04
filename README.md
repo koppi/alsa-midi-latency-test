@@ -33,26 +33,26 @@ How alsa-midi-latency-test can help:
 In summary, ``alsa-midi-latency-test`` is a valuable tool for anyone working with MIDI and ALSA on Linux™, allowing them to measure and troubleshoot latency issues effectively. 
 
 ## Install from source code
-```bash
+```shell
 git clone https://github.com/koppi/alsa-midi-latency-test.git
 cd alsa-midi-latency-test/
 ```
 The following packages are required to build alsa-midi-latency-test:
-```bash
+```shell
 sudo apt -y install debhelper autotools-dev automake libasound2-dev
 ```
 Compile alsa-midi-latency-test as follows:
-```bash
+```shell
 sh autogen.sh
 ./configure
 make
 ```
 Install alsa-midi-latency-test as follows:
-```bash
+```shell
 sudo make install
 ```
 or build and install a Debian / Ubuntu package:
-```bash
+```shell
 sudo apt -y install devscripts
 debuild -uc -us
 sudo dpkg -i ../alsa-midi-latency-test*.deb
