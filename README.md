@@ -115,4 +115,4 @@ Please [report bugs](https://github.com/koppi/alsa-midi-latency-test/issues) to 
 
  * [Jakob Flierl](https://github.com/koppi)
 
-Last updated May 2025.
+Last updated Jun 2025.
