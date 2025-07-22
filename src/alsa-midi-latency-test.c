@@ -517,6 +517,11 @@ static void setMinCount(int fd, int mcount) {
 }
 #endif // ENABLE_UART
 
+int compare_unsigned_int(const void *p1, const void *p2)
+{
+	return *(unsigned int *)p1 - *(unsigned int *)p2;
+}
+
 int main(int argc, char *argv[])
 {
 	static char short_options[] = "hVlau:y:T:g:to:i:RP:s:S:w:r123456x";
@@ -1076,9 +1081,15 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 
 		} else {
+			qsort(delays, sample_nr, sizeof(delays[0]), compare_unsigned_int);
+			double median = delays[sample_nr / 2];
+			if ((sample_nr & 1) == 0)
+				median = (median + delays[sample_nr / 2 + 1]) / 2.0;
+
 			printf("\n> SUCCESS\n");
 			printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
 			printf(" mean latency was %.*f ms\n", precision, mean_delay /1000000.0);
+			printf(" median latency was %.*f ms\n", precision, median /1000000.0);
 			printf(" worst latency was %.*f ms, which is great.\n", precision, max_delay/1000000.0);
 
 			printf("\n> Share your benchmarking results in the wiki at:\n\n https://github.com/koppi/alsa-midi-latency-test/wiki\n\n");
