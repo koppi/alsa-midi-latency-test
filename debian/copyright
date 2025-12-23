@@ -1,7 +1,26 @@
-The source code was downloaded from the alsa-midi-latency-test homepage:
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: alsa-midi-latency-test
+Upstream-Contact: Jakob Flierl <jakob.flierl@gmail.com>
+Source: https://github.com/koppi/alsa-midi-latency-test
 
-  http://github.com/koppi/alsa-midi-latency-test/
-
-alsa-midi-latency-test
-----------------------
-© 2009,2019 Jakob Flierl <jakob.flierl@gmail.com>
+Files: *
+Copyright: 2009-2026 Jakob Flierl <jakob.flierl@gmail.com>
+License: GPL-2.0-or-later
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ MA 02110-1301, USA.
+ .
+ On Debian systems, the full text of the GNU General Public License
+ version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.

@@ -28,6 +28,8 @@
 #include <sched.h>
 #include <poll.h>
 #include <getopt.h>
+#include <stdarg.h>
+#include <errno.h>
 #include <alsa/asoundlib.h>
 
 #include <sys/utsname.h>
@@ -965,7 +967,7 @@ int main(int argc, char *argv[])
 				err = read(uart_fd_in, rec_msg, sizeof(rec_msg));
 				// TODO: handle the case where these are not received all at once
 				if (err != sizeof(rec_msg))
-					check_snd("input UART event", errno);
+					check_posix("input UART event", errno);
 				received_something = 1;
 				if (test_status_byte == rec_msg[0])
 					break;

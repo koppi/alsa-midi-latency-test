@@ -29,7 +29,7 @@ then
 
   which ${program_prefix}gcc >/dev/null 2>&1 && CC=${program_prefix}gcc
   which ${target_cpu}-${target_os}-gcc >/dev/null 2>&1 \
-  && CC=${target_cpu}-${target-os}-gcc
+  && CC=${target_cpu}-${target_os}-gcc
   which ${target_cpu}-${target_vendor}-${target_os}-gcc >/dev/null 2>&1 \
   && CC=${target_cpu}-${target_vendor}-${target_os}-gcc
 
