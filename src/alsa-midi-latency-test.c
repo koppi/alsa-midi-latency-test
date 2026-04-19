@@ -852,7 +852,7 @@ int main(int argc, char *argv[])
 		pollfds = alloca(pollfds_count * sizeof *pollfds);
 		err = snd_seq_poll_descriptors(seq, pollfds, pollfds_count, POLLIN);
 	}
-	const char test_status_byte = 0x90;
+	const unsigned char test_status_byte = 0x90;
 	char msg[3] = { test_status_byte, 60, 127 };
 	if (use_rawmidi)
 	{
