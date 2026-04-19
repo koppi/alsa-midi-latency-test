@@ -1090,10 +1090,10 @@ int main(int argc, char *argv[])
 				median = (median + delays[sample_nr / 2 + 1]) / 2.0;
 
 			printf("\n> SUCCESS\n");
-			printf("\n best latency was %.*f ms\n", precision, min_delay / 1000000.0);
-			printf(" mean latency was %.*f ms\n", precision, mean_delay /1000000.0);
+			printf("\n best   latency was %.*f ms\n", precision, min_delay / 1000000.0);
+			printf(" mean   latency was %.*f ms\n", precision, mean_delay /1000000.0);
 			printf(" median latency was %.*f ms\n", precision, median /1000000.0);
-			printf(" worst latency was %.*f ms, which is great.\n", precision, max_delay/1000000.0);
+			printf(" worst  latency was %.*f ms, which is great.\n", precision, max_delay/1000000.0);
 
 			printf("\n> Share your benchmarking results in the wiki at:\n\n https://github.com/koppi/alsa-midi-latency-test/wiki\n\n");
 
