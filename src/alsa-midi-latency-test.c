@@ -100,7 +100,11 @@ static int set_realtime_priority(int policy, int prio)
 
 static void quiet_error_handler(const char *file, int line, const char *function, int err, const char *fmt, ...)
 {
-	return;
+	(void)file;
+	(void)line;
+	(void)function;
+	(void)err;
+	(void)fmt;
 }
 // code below borrowed rom:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
 // https://ccrma.stanford.edu/~craig/articles/linuxmidi/alsa-1.0/alsarawportlist.c
@@ -120,6 +124,7 @@ static void list_subdevice_info(snd_ctl_t *ctl, int card, int device);
 //
 
 static int is_input(snd_ctl_t *ctl, int card, int device, int sub) {
+   (void)card;
    snd_rawmidi_info_t *info;
    int status;
 
@@ -143,6 +148,7 @@ static int is_input(snd_ctl_t *ctl, int card, int device, int sub) {
 //
 
 static int is_output(snd_ctl_t *ctl, int card, int device, int sub) {
+   (void)card;
    snd_rawmidi_info_t *info;
    int status;
 
@@ -278,12 +284,8 @@ static void list_subdevice_info(snd_ctl_t *ctl, int card, int device) {
 static void list_ports_raw(void)
 {
 	int status;
-	int card = -1;  // use -1 to prime the pump of iterating through card list
-	char* longname  = NULL;
-	char* shortname = NULL;
+	int card = -1;
 	puts("Rawmidi ports:");
-
-	int found = 0;
 	while (1) {
 		if ((status = snd_card_next(&card)) < 0) {
 			fatal("cannot determine card number: %s", snd_strerror(status));
@@ -409,6 +411,7 @@ static int getRandomNumber(void)
 
 static void sighandler(int sig)
 {
+	(void)sig;
 	signal_received = 1;
 }
 
@@ -550,7 +553,7 @@ int main(int argc, char *argv[])
 	int do_list = 0;
 	int do_realtime = 0;
 	int rt_prio = sched_get_priority_max(SCHED_FIFO);
-	int skip_samples = 0;
+	unsigned int skip_samples = 0;
 	int nr_samples = 10000;
 	int random_wait = 0;
     int precision = 1;
@@ -619,11 +622,6 @@ int main(int argc, char *argv[])
 			break;
 		case 's':
 			skip_samples = atoi(optarg);
-			if (skip_samples < 0) {
-				printf("> Warning: Given number of events to skip cannot be smaller than zero! ");
-				printf("Setting nr of skip events to zero.\n");
-				skip_samples = 0;
-			}
 			break;
 		case 'S':
 			nr_samples = atoi(optarg);
@@ -826,12 +824,13 @@ int main(int argc, char *argv[])
 	check_mem(delays);
 
 	if (skip_samples) {
-		if (skip_samples == 1)
+		if (skip_samples == 1) {
 			if(verbose)
 				printf("> skipping first latency sample\n");
-		else
+		} else {
 			if(verbose)
 				printf("> skipping first %d latency samples\n", skip_samples);
+		}
 	}
 
 	if (debug == 1)
@@ -935,11 +934,13 @@ int main(int argc, char *argv[])
 			if (err < 0)
 				fatal("poll error: %s", strerror(errno));
 			unsigned short revents;
-			if (use_seq)
+			if (use_seq) {
 				err = snd_seq_poll_descriptors_revents(seq, pollfds, pollfds_count, &revents);
-			if (use_rawmidi)
+				check_snd("get poll events", err);
+			} else if (use_rawmidi) {
 				err = snd_rawmidi_poll_descriptors_revents(raw_in, pollfds, pollfds_count, &revents);
-			check_snd("get poll events", err);
+				check_snd("get poll events", err);
+			}
 #ifdef ENABLE_UART
 			if (use_uart)
 				revents = pollfds[0].revents;
@@ -1012,7 +1013,7 @@ int main(int argc, char *argv[])
 	if (verbose)
 		printf("\n> done.\n\n> latency distribution:\n");
 
-	if (!max_delay) {
+	if (!max_delay || min_delay == UINT_MAX) {
 		puts("no delay was measured; clock has too low resolution");
 		return EXIT_FAILURE;
 	}
