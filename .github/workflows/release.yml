@@ -114,7 +114,7 @@ jobs:
               echo "deb http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list
             fi
             apt-get update -qq
-            apt-get install -y -qq build-essential devscripts debhelper dh-make linux-sound-base
+            apt-get install -y -qq build-essential devscripts debhelper dh-make equivs
             mk-build-deps -i -t "apt --yes --no-install-recommends"
             sed -i "1s/.*/alsa-midi-latency-test (${VERSION}) ${CODENAME}; urgency=medium/" debian/changelog
             dpkg-buildpackage -b -rfakeroot -uc -us -d
