@@ -87,7 +87,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
-          name: ccm-deb-${{ matrix.distro }}-${{ matrix.codename }}-${{ matrix.arch }}
+          name: deb-${{ matrix.distro }}-${{ matrix.codename }}-${{ matrix.arch }}
           path: deb-output/
           if-no-files-found: ignore
 
