@@ -84,12 +84,9 @@ sudo dpkg -i ../alsa-midi-latency-test*.deb
 
 ## See also
 
- * http://lists.linuxaudio.org/listinfo/linux-audio-tuning
+ * http://lists.linuxaudio.org/
 
-   The linux-audio tuning (LAT) mailing list is to help GNU/Linux© distribution
-   maintainers  and  other interested users to share information on system
-   performance tuning matters, especially with regard to real-time Linux©
-   kernels.
+   The linux-audio mailing lists.
 
  * http://www.alsa-project.org
 
@@ -115,4 +112,4 @@ Please [report bugs](https://github.com/koppi/alsa-midi-latency-test/issues) to 
 
  * [Jakob Flierl](https://github.com/koppi)
 
-Last updated May 2026.
+Last updated September 2026.
